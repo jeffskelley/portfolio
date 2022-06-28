@@ -276,6 +276,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', resize)
   window.removeEventListener('mousemove', mousemove)
+  renderer.forceContextLoss()
 })
 </script>
 

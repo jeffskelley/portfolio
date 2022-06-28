@@ -202,6 +202,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', resize)
+  renderer.forceContextLoss()
 })
 </script>
 
@@ -217,7 +218,7 @@ onUnmounted(() => {
     <button class="reset" @click="reset">Reset</button>
 
     <template #description>
-      <p>Lorem ipsum</p>
+      <p>Uses custom-written GLSL shaders to dilate the mask drawn by the user.</p>
     </template>
   </ProjectContainer>
 </template>

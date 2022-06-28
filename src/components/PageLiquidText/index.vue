@@ -216,17 +216,18 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', resize)
   window.removeEventListener('mousemove', mousemove)
+  renderer.forceContextLoss()
 })
 </script>
 
 <template>
-  <ProjectContainer title="Flowmap distortion" :tech="['WebGL', 'GLSL', 'ThreeJS']">
+  <ProjectContainer title="Liquid text" :tech="['WebGL', 'GLSL', 'ThreeJS']">
     <div ref="container" class="container"></div>
 
     <template #description>
       <p>
-        Uses custom GLSL shaders to distort an image based on the velocity and position of the
-        user's mouse.
+        Uses custom-written GLSL shaders to distort an image based on the velocity and position of
+        the user's mouse.
       </p>
     </template>
   </ProjectContainer>

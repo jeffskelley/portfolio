@@ -10,14 +10,15 @@
     <h3>2D</h3>
     <ul>
       <li>
-        <router-link :to="{ name: 'flowmapDistortion' }"
-          >Flowmap distortion (WebGL, GLSL, Three.JS)</router-link
-        >
+        <router-link :to="{ name: 'liquidText' }">Liquid text (WebGL, GLSL, Three.JS)</router-link>
       </li>
       <li>
         <router-link :to="{ name: 'drawToReveal' }"
           >Draw to reveal (WebGL, GLSL, Three.JS)</router-link
         >
+      </li>
+      <li>
+        <router-link :to="{ name: 'dripMask' }">SVG Drip Mask (SVG, GSAP)</router-link>
       </li>
     </ul>
 

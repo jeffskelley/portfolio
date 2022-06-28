@@ -3,7 +3,7 @@ import GlobalHeader from 'components/GlobalHeader'
 </script>
 
 <template>
-  <div class="app">
+  <div>
     <GlobalHeader />
 
     <div class="app__main">
