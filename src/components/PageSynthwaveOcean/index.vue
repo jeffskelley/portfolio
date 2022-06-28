@@ -28,7 +28,7 @@ import backdropFragmentShader from './shaders/backdrop.frag'
 
 const config = {
   cameraPosition: new THREE.Vector3(0.0, 10.0, 30.0),
-  mouseDelta: { x: 6.0, y: 2.0 },
+  mouseDelta: new THREE.Vector2(6.0, 2.0),
   colors: {
     blue: new THREE.Vector3(0.0, 0.94, 1.0),
     darkBlue: new THREE.Vector3(0.03, 0.11, 0.35),
@@ -64,7 +64,7 @@ camera.lookAt(0, 10.0, 0)
 // const controls = new OrbitControls(camera, renderer.domElement)
 
 // mouse values will be between -1 and 1
-let mouse = { x: 0, y: 0 }
+let mouse = new THREE.Vector2(0, 0)
 
 /**
  * Moon
