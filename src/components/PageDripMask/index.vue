@@ -19,7 +19,7 @@ const container = ref(null)
 const maskEl = ref(null)
 
 const width = ref(0)
-const height = computed(() => content.length * lineHeight + 1)
+const height = computed(() => content.length * lineHeight + 2)
 const progress = ref(0)
 let timeline
 
@@ -165,7 +165,7 @@ onMounted(() => {
       <p>
         Sometimes you don't need complex WebGL shaders to acheive a visually interesting,
         technically performant effect. This component generates a drip pattern mask using bezier
-        curves in pure SVG—hover to see the effect.
+        curves in SVG.
       </p>
     </template>
   </ProjectContainer>
