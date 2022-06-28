@@ -6,7 +6,7 @@
   <article class="page-home">
     <h1>Jeff Kelley</h1>
 
-    <h2>Work Samples</h2>
+    <h2>Experiments and Work Samples</h2>
     <h3>2D</h3>
     <ul>
       <li>

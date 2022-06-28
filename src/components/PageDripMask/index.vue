@@ -14,10 +14,12 @@ const numSegments = 24
 const lineHeight = 120
 const content = ['Hello, world!', 'Hover over', 'the text to', 'see the effect']
 
+// template refs
 const container = ref(null)
+const maskEl = ref(null)
+
 const width = ref(0)
 const height = computed(() => content.length * lineHeight + 1)
-
 const progress = ref(0)
 let timeline
 
@@ -91,17 +93,26 @@ function generateSegments() {
 }
 
 function initTimeline() {
-  timeline = gsap.timeline().to(progress, { duration: 1.5, ease: 'power1.inOut', value: 1 }).pause()
+  timeline = gsap
+    .timeline()
+    .to(progress, { value: 1 })
+    .to(maskEl.value, { duration: 0, rotate: '180deg' })
+    .to(progress, { value: 0 })
+    .pause()
+
+  timeline.eventCallback('onComplete', () => {
+    timeline.progress(0).pause()
+  })
 }
 
 /**
  * Events
  */
 function play() {
-  timeline.play()
+  gsap.to(timeline, { duration: 1.3, progress: 0.5, ease: 'power1.inOut' })
 }
 function reverse() {
-  timeline.reverse()
+  gsap.to(timeline, { duration: 1.3, progress: 1, ease: 'power1.inOut' })
 }
 function resize() {
   const $el = container.value
@@ -124,7 +135,7 @@ onMounted(() => {
       <div ref="container" class="blockquote__content" @mouseenter="play" @mouseleave="reverse">
         <svg class="blockquote__svg" :viewBox="`0 0 ${width} ${height}`">
           <defs>
-            <clipPath id="clip-path">
+            <clipPath id="clip-path" ref="maskEl" :style="{ transformOrigin: '50% 50%' }">
               <path :d="mask" />
             </clipPath>
           </defs>
