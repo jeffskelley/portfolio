@@ -11,7 +11,7 @@ import MenuToggle from 'components/MenuToggle'
 <style lang="scss">
 .global-header {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 15px;
+  left: 15px;
 }
 </style>

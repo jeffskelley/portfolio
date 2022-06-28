@@ -14,6 +14,11 @@
           >Flowmap distortion (WebGL, GLSL, Three.JS)</router-link
         >
       </li>
+      <li>
+        <router-link :to="{ name: 'drawToReveal' }"
+          >Draw to reveal (WebGL, GLSL, Three.JS)</router-link
+        >
+      </li>
     </ul>
 
     <h3>3D</h3>

@@ -1,5 +1,4 @@
 uniform sampler2D tMap;
-uniform float uTime;
 uniform float uFalloff;
 uniform float uDissipation;
 uniform float uAspect;
