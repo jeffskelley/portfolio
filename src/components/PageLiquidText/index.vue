@@ -226,8 +226,8 @@ onUnmounted(() => {
 
     <template #description>
       <p>
-        Uses custom-written GLSL shaders to distort an image based on the velocity and position of
-        the user's mouse.
+        Uses custom-written GLSL shaders to temporarily distort an image in response to movements of
+        the user's mouse. Move your mouse over the text to see the effect.
       </p>
     </template>
   </ProjectContainer>

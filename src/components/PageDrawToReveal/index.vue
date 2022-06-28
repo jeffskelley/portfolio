@@ -218,7 +218,10 @@ onUnmounted(() => {
     <button class="reset" @click="reset">Reset</button>
 
     <template #description>
-      <p>Uses custom-written GLSL shaders to dilate the mask drawn by the user.</p>
+      <p>
+        Uses custom-written GLSL shaders to dilate the mask drawn by the user. Click and draw to
+        reveal a second image.
+      </p>
     </template>
   </ProjectContainer>
 </template>

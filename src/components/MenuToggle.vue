@@ -1,7 +1,15 @@
-<script setup></script>
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const theme = computed(() => {
+  return route.meta.hasLightBackground ? 'dark' : 'light'
+})
+</script>
 
 <template>
-  <router-link :to="{ name: 'home' }" class="menu-toggle">
+  <router-link :to="{ name: 'home' }" class="menu-toggle" :class="`menu-toggle--${theme}`">
     <span class="sr-only">Toggle Menu</span>
     <div class="menu-toggle__icon">
       <div
@@ -39,7 +47,6 @@
     left: 0;
     width: 16px;
     height: 2px;
-    background: #fff;
     display: block;
     transform-origin: center;
     transition: transform 0.3s;
@@ -76,6 +83,16 @@
     }
     .menu-toggle__icon-bar--3 {
       transform: translate(3px, 7px) rotate(-45deg);
+    }
+  }
+  &--light {
+    .menu-toggle__icon-bar {
+      background: #fff;
+    }
+  }
+  &--dark {
+    .menu-toggle__icon-bar {
+      background: #000;
     }
   }
 }

@@ -10,7 +10,7 @@ const routes = [
   // 2d
   { name: 'liquidText', path: '/liquid-text', component: LiquidText },
   { name: 'drawToReveal', path: '/draw-to-reveal', component: DrawToReveal },
-  { name: 'dripMask', path: '/drip-mask', component: DripMask },
+  { name: 'dripMask', path: '/drip-mask', component: DripMask, meta: { hasLightBackground: true } },
 
   // 3d
   { name: 'synthwaveOcean', path: '/synthwave-ocean', component: SynthwaveOcean },
