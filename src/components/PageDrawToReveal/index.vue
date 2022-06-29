@@ -7,6 +7,7 @@ export default {
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectContainer from 'components/ProjectContainer'
+import ButtonSolid from 'components/ButtonSolid'
 
 import * as THREE from 'three'
 import basicVertexShader from './shaders/basic.vert'
@@ -215,7 +216,7 @@ onUnmounted(() => {
       @mouseup="mouseup"
       @mousemove="mousemove"
     ></div>
-    <button class="reset" @click="reset">Reset</button>
+    <ButtonSolid class="reset" @click="reset">Reset</ButtonSolid>
 
     <template #description>
       <p>

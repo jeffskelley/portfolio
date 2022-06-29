@@ -87,7 +87,7 @@ function generateSegments() {
       // general wave shape
       deltaY:
         (gaussianRandom() - 0.5) * dripSize + // randomized ridges
-        Math.sin(segmentProgress * 2 * Math.PI) * sineWaveSize, // general sin wave shape
+        Math.sin(segmentProgress * Math.PI * 2) * sineWaveSize, // general sin wave shape
     }
   })
 }
