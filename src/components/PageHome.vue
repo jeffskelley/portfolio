@@ -25,7 +25,7 @@
             >
           </li>
           <li>
-            <router-link :to="{ name: 'dripMask' }">SVG Drip Mask (SVG, GSAP)</router-link>
+            <router-link :to="{ name: 'dripMask' }">SVG Drip Mask (SVG, GSAP, Canvas)</router-link>
           </li>
         </ul>
       </section>

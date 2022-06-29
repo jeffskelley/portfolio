@@ -136,7 +136,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="SVG Drip Mask" :tech="['SVG', 'GSAP']" class="page-drip-mask">
+  <ProjectContainer title="SVG Drip Mask" :tech="['SVG', 'GSAP', 'Canvas']" class="page-drip-mask">
     <blockquote class="blockquote">
       <div ref="container" class="blockquote__content" @mouseenter="play" @mouseleave="reverse">
         <svg class="blockquote__svg" :viewBox="`0 0 ${width} ${height}`">
