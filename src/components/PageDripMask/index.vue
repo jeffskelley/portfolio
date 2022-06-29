@@ -8,8 +8,12 @@ export default {
 import { gsap } from 'gsap'
 import { ref, computed, onMounted } from 'vue'
 
+import SimplexNoise from 'simplex-noise'
+
 import ProjectContainer from 'components/ProjectContainer'
 import DripBackground from './DripBackground'
+
+const simplex = new SimplexNoise()
 
 const numSegments = 24
 const lineHeight = 140
@@ -81,10 +85,6 @@ const mask = computed(() => {
  * Methods
  */
 
-function gaussianRandom() {
-  return 0.333 * (Math.random() + Math.random() + Math.random())
-}
-
 function generateSegments() {
   segments.value = [...new Array(numSegments)].map((_, i) => {
     const segmentProgress = (i + 1) / numSegments
@@ -92,7 +92,7 @@ function generateSegments() {
       x: segmentProgress * width.value,
       // general wave shape
       deltaY:
-        (Math.random() - 0.5) * lineHeight * 0.7 + // randomized ridges
+        simplex.noise2D(segmentProgress * width.value, new Date().getTime()) * lineHeight * 0.7 + // randomized ridges
         Math.sin(segmentProgress * 2 * Math.PI) * lineHeight * 0.7, // general sin wave shape
     }
   })

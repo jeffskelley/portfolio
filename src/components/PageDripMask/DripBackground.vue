@@ -1,13 +1,13 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
-
-import DripBackground from './DripBackground'
+import SimplexNoise from 'simplex-noise'
+const simplex = new SimplexNoise()
 
 const horizontalSegments = 75
 const verticalSegments = 30
 
 const sineWaveSize = 250
-const dripSize = 150
+const dripSize = 45
 
 // template refs
 const container = ref(null)
@@ -75,9 +75,6 @@ function getMask(progress) {
 /**
  * Methods
  */
-function gaussianRandom() {
-  return 0.333 * (Math.random() + Math.random() + Math.random())
-}
 
 function generateSegments() {
   segments.value = [...new Array(horizontalSegments)].map((_, i) => {
@@ -86,7 +83,7 @@ function generateSegments() {
       x: segmentProgress * width.value,
       // general wave shape
       deltaY:
-        (gaussianRandom() - 0.5) * dripSize + // randomized ridges
+        simplex.noise2D(segmentProgress * width.value, new Date().getTime()) * dripSize + // randomized ridges
         Math.sin(segmentProgress * Math.PI * 2) * sineWaveSize, // general sin wave shape
     }
   })

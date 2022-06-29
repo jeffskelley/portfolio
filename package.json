@@ -11,6 +11,7 @@
     "core-js": "^3.8.3",
     "glsl-noise": "^0.0.0",
     "gsap": "^3.10.4",
+    "simplex-noise": "^3.0.1",
     "three": "^0.141.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.16",
