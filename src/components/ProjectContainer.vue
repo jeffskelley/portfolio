@@ -13,7 +13,9 @@ defineProps({
 
 <template>
   <section class="project">
-    <slot></slot>
+    <div class="project__content">
+      <slot></slot>
+    </div>
 
     <div class="project__info">
       <header class="project__title">
@@ -33,10 +35,15 @@ defineProps({
 
 <style lang="scss">
 .project {
+  &__content {
+    position: relative;
+    z-index: 10;
+  }
   &__info {
     position: fixed;
     bottom: 25px;
     right: 25px;
+    z-index: 100;
     max-width: 350px;
     padding: 15px;
 

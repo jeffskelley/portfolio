@@ -44,6 +44,7 @@ module.exports = defineConfig({
       scss: {
         additionalData: `
           @use "sass:math";
+          @use "sass:list";
           @import "src/styles/global.scss";
         `,
       },

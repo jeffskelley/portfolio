@@ -9,6 +9,7 @@ import { gsap } from 'gsap'
 import { ref, computed, onMounted } from 'vue'
 
 import ProjectContainer from 'components/ProjectContainer'
+import DripBackground from './DripBackground'
 
 const numSegments = 24
 const lineHeight = 120
@@ -101,7 +102,7 @@ function initTimeline() {
     .pause()
 
   timeline.eventCallback('onComplete', () => {
-    timeline.progress(0).pause()
+    timeline.progress(0)
   })
 }
 
@@ -140,6 +141,12 @@ onMounted(() => {
             </clipPath>
           </defs>
           <g>
+            <text x="0" y="0" class="blockquote__text blockquote__text--outline">
+              <tspan v-for="(line, index) in content" :key="index" x="50%" :dy="lineHeight">
+                {{ line }}
+              </tspan>
+            </text>
+
             <text
               x="0"
               y="0"
@@ -150,16 +157,12 @@ onMounted(() => {
                 {{ line }}
               </tspan>
             </text>
-
-            <text x="0" y="0" class="blockquote__text blockquote__text--outline">
-              <tspan v-for="(line, index) in content" :key="index" x="50%" :dy="lineHeight">
-                {{ line }}
-              </tspan>
-            </text>
           </g>
         </svg>
       </div>
     </blockquote>
+
+    <DripBackground />
 
     <template #description>
       <p>
@@ -175,6 +178,8 @@ onMounted(() => {
 .blockquote {
   display: flex;
   height: 100vh;
+  position: relative;
+  z-index: 20;
 
   &__content {
     width: 671px;
@@ -184,6 +189,7 @@ onMounted(() => {
   &__svg {
     cursor: pointer;
     width: 100%;
+    contain: paint;
   }
 
   &__text {
@@ -195,12 +201,23 @@ onMounted(() => {
     fill: none;
 
     &--fill {
+      // fill: #000;
       fill: #2f3035;
     }
     &--outline {
-      stroke: #171625;
-      opacity: 0.3;
+      fill: #fff;
+      stroke: #2f3035;
+      stroke-width: 2px;
     }
   }
+}
+
+.drip-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
 }
 </style>

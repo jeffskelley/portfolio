@@ -7,6 +7,7 @@
     <div class="page-home__inner">
       <header class="page-home__header">
         <h1>Jeff Kelley</h1>
+
         <p>Creative development experiments and work samples</p>
       </header>
 
