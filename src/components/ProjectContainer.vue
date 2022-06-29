@@ -57,7 +57,7 @@ defineProps({
       font-size: 25px;
       text-transform: uppercase;
       letter-spacing: 0.025em;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
     }
     p {
       font-size: 14px;

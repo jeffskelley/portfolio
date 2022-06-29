@@ -19,4 +19,11 @@ export default {
 </script>
 
 <style lang="scss">
+.app__main {
+  position: relative;
+  z-index: 10;
+}
+.global-header {
+  z-index: 100;
+}
 </style>

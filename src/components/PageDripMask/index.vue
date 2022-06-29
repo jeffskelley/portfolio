@@ -12,7 +12,7 @@ import ProjectContainer from 'components/ProjectContainer'
 import DripBackground from './DripBackground'
 
 const numSegments = 24
-const lineHeight = 120
+const lineHeight = 140
 const content = ['Hello, world!', 'Hover over', 'the text to', 'see the effect']
 
 // template refs
@@ -80,6 +80,11 @@ const mask = computed(() => {
 /**
  * Methods
  */
+
+function gaussianRandom() {
+  return 0.333 * (Math.random() + Math.random() + Math.random())
+}
+
 function generateSegments() {
   segments.value = [...new Array(numSegments)].map((_, i) => {
     const segmentProgress = (i + 1) / numSegments
@@ -167,8 +172,11 @@ onMounted(() => {
     <template #description>
       <p>
         Sometimes you don't need complex WebGL shaders to acheive a visually interesting,
-        technically performant effect. This component generates a drip pattern mask using bezier
-        curves in SVG.
+        technically performant effect.
+      </p>
+      <p>
+        Generated at runtime, the hover animation is an SVG and the background is created using the
+        2D Canvas API.
       </p>
     </template>
   </ProjectContainer>
@@ -182,7 +190,7 @@ onMounted(() => {
   z-index: 20;
 
   &__content {
-    width: 671px;
+    width: 800px;
     margin: auto;
   }
 
@@ -195,19 +203,18 @@ onMounted(() => {
   &__text {
     font-family: $fontDisplay;
     font-weight: bold;
-    font-size: 100px;
+    font-size: 120px;
     text-anchor: middle;
     text-transform: uppercase;
     fill: none;
 
     &--fill {
-      // fill: #000;
       fill: #2f3035;
     }
     &--outline {
       fill: #fff;
       stroke: #2f3035;
-      stroke-width: 2px;
+      stroke-width: 1.5px;
     }
   }
 }
