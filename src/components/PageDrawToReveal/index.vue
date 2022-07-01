@@ -165,10 +165,13 @@ function mousedown(event) {
   const { clientX, clientY } = event
   mouseIsDown = true
   mouse.set(clientX / windowWidth, 1 - clientY / windowHeight)
+
+  document.body.classList.add('no-select')
 }
 
 function mouseup() {
   mouseIsDown = false
+  document.body.classList.remove('no-select')
 }
 
 function resize() {
@@ -199,23 +202,20 @@ onMounted(() => {
   resize()
   animate()
   window.addEventListener('resize', resize)
+  window.addEventListener('mouseup', mouseup)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', resize)
+  window.removeEventListener('mouseup', mouseup)
+  document.body.classList.remove('no-select')
   renderer.forceContextLoss()
 })
 </script>
 
 <template>
   <ProjectContainer title="Draw to Reveal" :tech="['WebGL', 'GLSL', 'ThreeJS']">
-    <div
-      ref="container"
-      class="container"
-      @mousedown="mousedown"
-      @mouseup="mouseup"
-      @mousemove="mousemove"
-    ></div>
+    <div ref="container" class="container" @mousedown="mousedown" @mousemove="mousemove"></div>
     <ButtonSolid class="reset" @click="reset">Reset</ButtonSolid>
 
     <template #description>

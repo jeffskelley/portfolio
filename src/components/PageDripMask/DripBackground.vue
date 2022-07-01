@@ -3,18 +3,11 @@ import { ref, onMounted, nextTick } from 'vue'
 import SimplexNoise from 'simplex-noise'
 const simplex = new SimplexNoise()
 
+// config
 const horizontalSegments = 75
 const verticalSegments = 30
-
 const sineWaveSize = 250
 const dripSize = 45
-
-// template refs
-const container = ref(null)
-const canvas = ref(null)
-
-const width = ref(0)
-const height = ref(0)
 const colors = [
   'rgb(125, 199, 139)',
   'rgb(222, 104, 95)',
@@ -24,6 +17,13 @@ const colors = [
   'rgb(250, 238, 82)',
   'rgb(75, 98, 167)',
 ]
+
+// template refs
+const container = ref(null)
+const canvas = ref(null)
+
+const width = ref(0)
+const height = ref(0)
 
 const segments = ref()
 function getMask(progress) {
