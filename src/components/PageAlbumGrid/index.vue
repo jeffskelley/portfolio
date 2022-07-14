@@ -160,7 +160,31 @@ onUnmounted(() => {
     <div ref="container" class="container"></div>
 
     <template #description>
-      <p>Lorem ipsum</p>
+      <p>Pulled from a prototype I created for a streaming music client.</p>
+      <p>Rendered entirely in the fragment shader.</p>
+
+      <ul>
+        <li>
+          <label>Mouse Pan</label>
+          <input v-model="mouseAmt" type="range" step="0.0001" :min="0" :max="1.0" />
+        </li>
+        <li>
+          <label>Artwork Size</label>
+          <input v-model="width" type="range" :min="100" :max="500" />
+        </li>
+        <li>
+          <label>Gutter Size</label>
+          <input v-model="gutter" type="range" :min="0" :max="40" />
+        </li>
+        <li>
+          <label>Cycle length</label>
+          <input v-model="cycleLength" type="range" :min="4" :max="30" />
+        </li>
+        <li>
+          <label>Speed</label>
+          <input v-model="speed" type="range" step="0.0001" :min="0" :max="0.005" />
+        </li>
+      </ul>
     </template>
   </ProjectContainer>
 </template>

@@ -56,7 +56,7 @@ void main() {
   uv.x += step(1., mod(uv.y,2.0)) * motion1;
 
   // add motion to n * 2 - 1 rows
-  float motion2 = smoothstep(uCycleLength * 0.25 - 1.0, uCycleLength * 0.25, fract(uTime * uSpeed / uCycleLength) * 20.0) * -1.0;
+  float motion2 = smoothstep(uCycleLength * 0.25 - 1.0, uCycleLength * 0.25, fract(uTime * uSpeed / uCycleLength) * uCycleLength) * -1.0;
   motion2 += smoothstep(uCycleLength * 0.75 - 1.0, uCycleLength * 0.75, fract(uTime * uSpeed / uCycleLength) * uCycleLength) * -1.0;
   uv.x += (1.0 - step(1., mod(uv.y, 2.0))) * motion2;
 

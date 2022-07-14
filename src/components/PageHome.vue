@@ -27,6 +27,11 @@
           <li>
             <router-link :to="{ name: 'dripMask' }">SVG Drip Mask (SVG, GSAP, Canvas)</router-link>
           </li>
+          <li>
+            <router-link :to="{ name: 'albumGrid' }"
+              >Fisheye Album Art Grid (WebGL, GLSL, Three.JS)</router-link
+            >
+          </li>
         </ul>
       </section>
 
