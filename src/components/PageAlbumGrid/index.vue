@@ -30,32 +30,37 @@ import fragmentShader from './shaders/main.frag'
 const fisheye = ref(0.1)
 const bgFisheye = ref(-0.1)
 const mouseAmt = ref(0.25)
-const width = ref(350.0)
+const width = ref(400.0)
 const bgWidth = ref(190.0)
 const gutter = ref(0.2)
-// const cycleLength = ref(20.0)
-// const speed = ref(0.001)
 const offsetX1 = ref(0.0)
 const offsetX2 = ref(0.0)
+const distortion1 = ref(0.0)
+const distortion2 = ref(0.0)
 const offsetY1 = ref(0.5)
 const offsetY2 = ref(0.0)
 const showingControls = ref(false)
+
 const controlsVerb = computed(() => (showingControls.value ? 'Hide' : 'Show'))
 const invertMouseAmt = computed(() => mouseAmt.value * -1)
 const invertOffsetX1 = computed(() => offsetX1.value * -1)
 const invertOffsetX2 = computed(() => offsetX1.value * -1)
 const invertOffsetY1 = computed(() => offsetY1.value * -1)
 const invertOffsetY2 = computed(() => offsetY2.value * -1)
+const distortion1Float = computed(() => parseFloat(distortion1.value))
+const distortion2Float = computed(() => parseFloat(distortion2.value))
 
 /**
  * GSAP Timeline
  */
 const timeline = gsap
   .timeline({ repeat: -1 })
-  .to(offsetY1, { value: 1.5, duration: 0.5, ease: 'Power2.easeInOut' }, 4.0)
-  .to(offsetY1, { value: 2.5, duration: 0.5, ease: 'Power2.easeInOut' }, 8.0)
-  .to(offsetY2, { value: -1.0, duration: 0.5, ease: 'Power2.easeInOut' }, 6.0)
-  .to(offsetY2, { value: -2.0, duration: 0.5, ease: 'Power2.easeInOut' }, 12.0)
+  .to(offsetY1, { value: 1.5, duration: 0.5, ease: 'Power2.easeInOut', delay: 3 })
+  .to(offsetY1, { value: 2.5, duration: 0.5, ease: 'Power2.easeInOut', delay: 3 })
+  .call(blink)
+  .to(offsetY2, { value: -1.0, duration: 0.5, ease: 'Power2.easeInOut', delay: 3 })
+  .to(offsetY2, { value: -2.0, duration: 0.5, ease: 'Power2.easeInOut', delay: 3 })
+  .call(blink)
 
 /**
  * Scene initialization
@@ -114,6 +119,8 @@ const material = new THREE.ShaderMaterial({
     uOffsetX2: offsetX2,
     uOffsetY1: offsetY1,
     uOffsetY2: offsetY2,
+    uDistortion1: distortion1Float,
+    uDistortion2: distortion2Float,
     uAlpha: { value: 1.0 },
   },
 })
@@ -142,6 +149,8 @@ const bgMaterial = new THREE.ShaderMaterial({
     uOffsetX2: invertOffsetX2,
     uOffsetY1: invertOffsetY1,
     uOffsetY2: invertOffsetY2,
+    uDistortion1: distortion1Float,
+    uDistortion2: distortion2Float,
     uAlpha: { value: 0.2 },
   },
 })
@@ -156,19 +165,19 @@ scene.background = new THREE.Color('black')
  */
 
 const loader = new THREE.TextureLoader()
-loader.load(artwork1, (texture) => {
+const texture1 = loader.load(artwork1, (texture) => {
   material.uniforms.tImage1.value = texture
   bgMaterial.uniforms.tImage1.value = texture
 })
-loader.load(artwork2, (texture) => {
+const texture2 = loader.load(artwork2, (texture) => {
   material.uniforms.tImage2.value = texture
   bgMaterial.uniforms.tImage2.value = texture
 })
-loader.load(artwork3, (texture) => {
+const texture3 = loader.load(artwork3, (texture) => {
   material.uniforms.tImage3.value = texture
   bgMaterial.uniforms.tImage3.value = texture
 })
-loader.load(artwork4, (texture) => {
+const texture4 = loader.load(artwork4, (texture) => {
   material.uniforms.tImage4.value = texture
   bgMaterial.uniforms.tImage4.value = texture
 })
@@ -217,6 +226,30 @@ function resize() {
 
 function toggleControls() {
   showingControls.value = !showingControls.value
+}
+
+let flipped = false
+function blink() {
+  console.log('blink')
+  flipped = !flipped
+  const newTexture1 = flipped ? texture1 : texture1
+  const newTexture2 = flipped ? texture1 : texture2
+  const newTexture3 = flipped ? texture1 : texture3
+  const newTexture4 = flipped ? texture1 : texture4
+  gsap
+    .timeline({ repeat: 0 })
+    .to(distortion1, { value: 1.0, duration: 0.4, ease: 'Power2.easeIn' })
+    .to(material.uniforms.tImage1, { value: newTexture1, duration: 0 })
+    .to(bgMaterial.uniforms.tImage1, { value: newTexture1, duration: 0 })
+    .to(material.uniforms.tImage2, { value: newTexture2, duration: 0 })
+    .to(bgMaterial.uniforms.tImage2, { value: newTexture2, duration: 0 })
+    .to(distortion1, { value: 0.0, duration: 0.1, ease: 'Power2.easeOut' })
+    .to(distortion2, { value: 1.0, duration: 0.4, ease: 'Power2.easeIn' }, '-=0.25')
+    .to(material.uniforms.tImage3, { value: newTexture3, duration: 0 })
+    .to(bgMaterial.uniforms.tImage3, { value: newTexture3, duration: 0 })
+    .to(material.uniforms.tImage4, { value: newTexture4, duration: 0 })
+    .to(bgMaterial.uniforms.tImage4, { value: newTexture4, duration: 0 })
+    .to(distortion2, { value: 0.0, duration: 0.1, ease: 'Power2.easeOut' })
 }
 
 /**
