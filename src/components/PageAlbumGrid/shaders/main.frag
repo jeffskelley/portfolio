@@ -9,6 +9,7 @@ uniform vec2 uMouse;
 uniform float uTime;
 
 uniform float uMouseAmt;
+uniform float uFisheye;
 uniform float uWidth;
 uniform float uGutter;
 uniform float uCycleLength;
@@ -45,7 +46,7 @@ void main() {
   float aspect = uWindowDimensions.y / uWindowDimensions.x;
   vec2 uv = vUV;
   
-  uv = brownConradyDistortion(uv, 0.15, 0.01); // add distortion
+  uv = brownConradyDistortion(uv, uFisheye, 0.01); // add distortion
   uv.y *= aspect; // fix aspect ratio
   uv += uMouse * uMouseAmt; // add mouse offset
   uv *= uWindowDimensions.x / uWidth; // scale up

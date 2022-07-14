@@ -18,6 +18,7 @@ import fragmentShader from './shaders/main.frag'
 
 import gsap from 'gsap'
 
+const fisheye = ref(0.15)
 const mouseAmt = ref(0.25)
 const width = ref(300.0)
 const gutter = ref(30.0)
@@ -67,6 +68,7 @@ const material = new THREE.ShaderMaterial({
     uMouse: { value: mouse },
     uTime: { value: 0 },
 
+    uFisheye: fisheye,
     uMouseAmt: mouseAmt,
     uWidth: width,
     uGutter: gutter,
@@ -165,8 +167,8 @@ onUnmounted(() => {
 
       <ul>
         <li>
-          <label>Mouse Pan</label>
-          <input v-model="mouseAmt" type="range" step="0.0001" :min="0" :max="1.0" />
+          <label>Fisheye</label>
+          <input v-model="fisheye" type="range" step="0.0001" :min="0" :max="0.5" />
         </li>
         <li>
           <label>Artwork Size</label>
