@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "glsl-fxaa": "^3.0.0",
     "glsl-noise": "^0.0.0",
     "gsap": "^3.10.4",
     "simplex-noise": "^3.0.1",

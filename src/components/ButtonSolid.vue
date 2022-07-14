@@ -49,5 +49,9 @@ defineProps({
       background: rgb(150, 150, 150);
     }
   }
+  &--gray {
+    background: #999;
+    color: #fff;
+  }
 }
 </style>
