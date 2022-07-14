@@ -1,0 +1,79 @@
+varying vec2 vUV;
+
+uniform sampler2D tImage1;
+uniform sampler2D tImage2;
+uniform sampler2D tImage3;
+uniform sampler2D tImage4;
+uniform vec2 uWindowDimensions;
+uniform vec2 uMouse;
+uniform float uTime;
+
+uniform float uMouseAmt;
+uniform float uWidth;
+uniform float uGutter;
+uniform float uCycleLength;
+uniform float uSpeed;
+
+vec2 brownConradyDistortion(in vec2 uv, in float k1, in float k2) {
+    // distortion function from https://www.shadertoy.com/view/wtBXRz
+    uv = uv * 2.0 - 1.0;	// brown conrady takes [-1:1]
+
+    // positive values of K1 give barrel distortion, negative give pincushion
+    float r2 = uv.x*uv.x + uv.y*uv.y;
+    uv *= 1.0 + k1 * r2 + k2 * r2 * r2;
+    
+    // tangential distortion (due to off center lens elements)
+    // is not modeled in this function, but if it was, the terms would go here
+    
+    uv = (uv * .5 + .5);	// restore -> [0:1]
+    return 
+    uv;
+}
+
+vec4 getImage(in vec2 uv, in float index) {
+  if (index == 0.) {
+    return texture2D(tImage1, uv);
+  } else if (index == 1.) {
+    return texture2D(tImage2, uv);
+  } else if (index == 2.) {
+    return texture2D(tImage3, uv);
+  }
+  return texture2D(tImage4, uv);
+}
+
+void main() {
+  float aspect = uWindowDimensions.y / uWindowDimensions.x;
+  vec2 uv = vUV;
+  
+  uv = brownConradyDistortion(uv, 0.15, 0.01); // add distortion
+  uv.y *= aspect; // fix aspect ratio
+  uv += uMouse * uMouseAmt; // add mouse offset
+  uv *= uWindowDimensions.x / uWidth; // scale up
+
+  // add motion to n * 2 rows
+  float motion1 = smoothstep(uCycleLength * 0.5 - 1.0, uCycleLength * 0.5, fract(uTime * uSpeed / uCycleLength) * uCycleLength);
+  motion1 += smoothstep(uCycleLength - 1.0, uCycleLength, fract(uTime * uSpeed / uCycleLength) * uCycleLength);
+  uv.x += step(1., mod(uv.y,2.0)) * motion1;
+
+  // add motion to n * 2 - 1 rows
+  float motion2 = smoothstep(uCycleLength * 0.25 - 1.0, uCycleLength * 0.25, fract(uTime * uSpeed / uCycleLength) * 20.0) * -1.0;
+  motion2 += smoothstep(uCycleLength * 0.75 - 1.0, uCycleLength * 0.75, fract(uTime * uSpeed / uCycleLength) * uCycleLength) * -1.0;
+  uv.x += (1.0 - step(1., mod(uv.y, 2.0))) * motion2;
+
+  // get index
+  float index = 0.0;
+  index += step(1., mod(uv.x, 2.0));
+  index += step(1., mod(uv.y, 2.0)) * 2.0;
+
+  uv = fract(uv); // repeat 0.0 - 1.0
+
+  // add gutters
+  uv *= ((uWidth + uGutter) / uWidth);
+  if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0 ) {
+    discard;
+  }
+
+  // get image based on id
+  vec4 color = getImage(uv, index);
+  gl_FragColor = color;
+}

@@ -3,6 +3,7 @@ import SynthwaveOcean from 'components/PageSynthwaveOcean'
 import LiquidText from 'components/PageLiquidText'
 import DrawToReveal from 'components/PageDrawToReveal'
 import DripMask from 'components/PageDripMask'
+import AlbumGrid from 'components/PageAlbumGrid'
 
 const routes = [
   { name: 'home', path: '/', component: Home },
@@ -16,6 +17,8 @@ const routes = [
     component: DripMask,
     // meta: { hasLightBackground: true },
   },
+
+  { name: 'albumGrid', path: '/album-grid', component: AlbumGrid },
 
   // 3d
   { name: 'synthwaveOcean', path: '/synthwave-ocean', component: SynthwaveOcean },
