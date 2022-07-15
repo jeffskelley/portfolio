@@ -12,34 +12,29 @@
       </header>
 
       <section class="page-home__section">
-        <h3>2D</h3>
         <ul>
           <li>
-            <router-link :to="{ name: 'liquidText' }"
+            <router-link class="page-home__link" :to="{ name: 'albumGrid' }"
+              >Fisheye Album Art Grid (WebGL, GLSL, Three.JS)</router-link
+            >
+          </li>
+          <li>
+            <router-link class="page-home__link" :to="{ name: 'liquidText' }"
               >Liquid text (WebGL, GLSL, Three.JS)</router-link
             >
           </li>
           <li>
-            <router-link :to="{ name: 'drawToReveal' }"
+            <router-link class="page-home__link" :to="{ name: 'dripMask' }"
+              >SVG Drip Mask (SVG, GSAP, Canvas)</router-link
+            >
+          </li>
+          <li>
+            <router-link class="page-home__link" :to="{ name: 'drawToReveal' }"
               >Draw to reveal (WebGL, GLSL, Three.JS)</router-link
             >
           </li>
           <li>
-            <router-link :to="{ name: 'dripMask' }">SVG Drip Mask (SVG, GSAP, Canvas)</router-link>
-          </li>
-          <li>
-            <router-link :to="{ name: 'albumGrid' }"
-              >Fisheye Album Art Grid (WebGL, GLSL, Three.JS)</router-link
-            >
-          </li>
-        </ul>
-      </section>
-
-      <section class="page-home__section">
-        <h3>3D</h3>
-        <ul>
-          <li>
-            <router-link :to="{ name: 'synthwaveOcean' }"
+            <router-link class="page-home__link" :to="{ name: 'synthwaveOcean' }"
               >Synthwave ocean (WebGL, GLSL, Three.JS)</router-link
             >
           </li>

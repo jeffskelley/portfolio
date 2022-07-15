@@ -1,14 +1,25 @@
 <script setup>
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+
 defineProps({
-  title: {
-    type: String,
-    default: null,
-  },
-  tech: {
-    type: Array,
-    default: () => [],
+  showInfo: {
+    type: Boolean,
+    default: true,
   },
 })
+
+const store = useStore()
+const route = useRoute()
+const projectIndex = computed(() =>
+  store.state.projects.findIndex((project) => project.route.name === route.name)
+)
+const project = computed(() => store.state.projects[projectIndex.value])
+const nextProject = computed(() => store.state.projects[projectIndex.value + 1])
+const previousProject = computed(() => store.state.projects[projectIndex.value - 1])
+const title = computed(() => project.value.title)
+const tech = computed(() => project.value.tech)
 </script>
 
 <template>
@@ -17,18 +28,27 @@ defineProps({
       <slot></slot>
     </div>
 
-    <div class="project__info">
+    <div v-if="showInfo" class="project__info">
       <header class="project__title">
         <h1>{{ title }}</h1>
       </header>
-      <div class="project__description">
-        <slot name="description"></slot>
-      </div>
       <ul class="project__tech">
         <li v-for="item in tech" :key="item">
           {{ item }}
         </li>
       </ul>
+
+      <div class="project__description">
+        <slot name="description"></slot>
+      </div>
+      <footer class="project__footer">
+        <router-link v-if="previousProject" class="project__previous" :to="previousProject.route"
+          >Previous</router-link
+        >
+        <router-link v-if="nextProject" class="project__next" :to="nextProject.route"
+          >Next</router-link
+        >
+      </footer>
     </div>
   </section>
 </template>
@@ -44,6 +64,7 @@ defineProps({
     bottom: 25px;
     right: 25px;
     z-index: 100;
+    width: 100%;
     max-width: 350px;
     padding: 15px;
 
@@ -57,7 +78,7 @@ defineProps({
       font-size: 25px;
       text-transform: uppercase;
       letter-spacing: 0.025em;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
     }
     p {
       font-size: 14px;
@@ -69,12 +90,21 @@ defineProps({
     font-family: $fontDisplay;
     font-size: 14px;
     letter-spacing: 0.025em;
-    margin-top: 25px;
+    margin-bottom: 15px;
     display: flex;
 
     li:not(:first-child) {
       padding-left: 10px;
     }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+  }
+  &__next {
+    margin-left: auto;
   }
 }
 </style>

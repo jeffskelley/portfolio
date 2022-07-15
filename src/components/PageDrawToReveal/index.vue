@@ -219,11 +219,12 @@ onUnmounted(() => {
     <ButtonSolid class="reset" @click="reset">Reset</ButtonSolid>
 
     <template #description>
+      <p>Click and draw to reveal a second image.</p>
       <p>
-        Uses custom-written GLSL shaders to dilate the mask drawn by the user. Click and draw to
-        reveal a second image.
-      </p>
-    </template>
+        Created for an experiential marketing agency as a way to show off spaces before and after
+        they were transformed.
+      </p></template
+    >
   </ProjectContainer>
 </template>
 

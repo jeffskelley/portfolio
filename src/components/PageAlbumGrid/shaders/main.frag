@@ -1,3 +1,6 @@
+#pragma glslify: roundedBox2D = require(../../../glsl/utils/roundedBox2D.glsl)
+#pragma glslify: brownConradyDistortion = require(../../../glsl/utils/brownConradyDistortion.glsl)
+
 varying vec2 vUV;
 // varying vec3 vPosition;
 
@@ -13,30 +16,12 @@ uniform float uOffsetY1;
 uniform float uOffsetY2;
 uniform float uDistortion1;
 uniform float uDistortion2;
-// uniform float uTime;
 
 uniform float uMouseAmt;
 uniform float uFisheye;
 uniform float uWidth;
 uniform float uGutter;
 uniform float uAlpha;
-// uniform float uCycleLength;
-// uniform float uSpeed;
-
-vec2 brownConradyDistortion(in vec2 uv, in float k1, in float k2) {
-  // distortion function from https://www.shadertoy.com/view/wtBXRz
-  uv = uv * 2.0 - 1.0;	// brown conrady takes [-1:1]
-
-  // positive values of K1 give barrel distortion, negative give pincushion
-  float r2 = uv.x * uv.x + uv.y * uv.y;
-  uv *= 1.0 + k1 * r2 + k2 * r2 * r2;
-
-  // tangential distortion (due to off center lens elements)
-  // is not modeled in this function, but if it was, the terms would go here
-
-  uv = (uv * .5 + .5);	// restore -> [0:1]
-  return uv;
-}
 
 vec4 getImage(in vec2 uv, in float index) {
   if(index == 0.) {
@@ -79,7 +64,7 @@ void main() {
   uv = fract(uv); // repeat 0.0 - 1.0
 
   // row distortion
-  uv.y = yIndex == 0.0 ? (uv.y - 0.5) * pow(100.0, uDistortion1) + 0.5 : (uv.y - 0.5) * pow(100.0, uDistortion2) + 0.5;
+  uv.y = yIndex == 0.0 ? (uv.y - 0.5) * pow(20.0, uDistortion1) + 0.5 : (uv.y - 0.5) * pow(20.0, uDistortion2) + 0.5;
   uv = yIndex == 0.0 ? brownConradyDistortion(uv, uDistortion1, 0.01) : brownConradyDistortion(uv, uDistortion2, 0.01);
 
   // add gutters
@@ -89,9 +74,5 @@ void main() {
   // get image based on id
   vec4 color = getImage(uv, index);
   gl_FragColor = color;
-  gl_FragColor.a = uAlpha;
-
-  if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
-    gl_FragColor.a = 0.0;
-  }
+  gl_FragColor.a = roundedBox2D(uv) * uAlpha;
 }
