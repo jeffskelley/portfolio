@@ -42,7 +42,6 @@ const offsetY1 = ref(0.5)
 const offsetY2 = ref(0.0)
 const showingControls = ref(false)
 
-const controlsVerb = computed(() => (showingControls.value ? 'Hide' : 'Show'))
 const invertMouseAmt = computed(() => mouseAmt.value * -1)
 const invertOffsetX1 = computed(() => offsetX1.value * -1)
 const invertOffsetX2 = computed(() => offsetX1.value * -1)
@@ -56,10 +55,10 @@ const distortion2Float = computed(() => parseFloat(distortion2.value))
  */
 const timeline = gsap
   .timeline({ repeat: -1 })
-  .to(offsetY1, { value: 1.5, duration: 1, ease: 'Power2.easeInOut', delay: 4 })
-  .to(offsetY2, { value: -1.0, duration: 1, ease: 'Power2.easeInOut', delay: 4 })
-  .to(offsetY1, { value: 2.5, duration: 1, ease: 'Power2.easeInOut', delay: 4 })
-  .to(offsetY2, { value: -2.0, duration: 1, ease: 'Power2.easeInOut', delay: 4 })
+  .to(offsetY1, { value: 1.5, duration: 1, ease: 'power2.inOut', delay: 4 })
+  .to(offsetY2, { value: -1.0, duration: 1, ease: 'power2.inOut', delay: 4 })
+  .to(offsetY1, { value: 2.5, duration: 1, ease: 'power2.inOut', delay: 4 })
+  .to(offsetY2, { value: -2.0, duration: 1, ease: 'power2.inOut', delay: 4 })
 
 /**
  * Scene initialization
@@ -241,21 +240,21 @@ function flip() {
 
   const flip1 = gsap
     .timeline({ repeat: 0 })
-    .to(distortion1, { value: 1.0, duration: timingIn, ease: 'Power2.easeIn' })
+    .to(distortion1, { value: 1.0, duration: timingIn, ease: 'power2.in' })
     .to(material.uniforms.tImage1, { value: newTexture1, duration: 0 })
     .to(bgMaterial.uniforms.tImage1, { value: newTexture1, duration: 0 })
     .to(material.uniforms.tImage2, { value: newTexture2, duration: 0 })
     .to(bgMaterial.uniforms.tImage2, { value: newTexture2, duration: 0 })
-    .to(distortion1, { value: 0.0, duration: timingOut, ease: 'Power2.easeOut' })
+    .to(distortion1, { value: 0.0, duration: timingOut, ease: 'power2.out' })
     .pause()
   const flip2 = gsap
     .timeline()
-    .to(distortion2, { value: 1.0, duration: timingIn, ease: 'Power2.easeIn' })
+    .to(distortion2, { value: 1.0, duration: timingIn, ease: 'power2.in' })
     .to(material.uniforms.tImage3, { value: newTexture3, duration: 0 })
     .to(bgMaterial.uniforms.tImage3, { value: newTexture3, duration: 0 })
     .to(material.uniforms.tImage4, { value: newTexture4, duration: 0 })
     .to(bgMaterial.uniforms.tImage4, { value: newTexture4, duration: 0 })
-    .to(distortion2, { value: 0.0, duration: timingOut, ease: 'Power2.easeOut' })
+    .to(distortion2, { value: 0.0, duration: timingOut, ease: 'power2.out' })
     .pause()
   gsap
     .timeline()

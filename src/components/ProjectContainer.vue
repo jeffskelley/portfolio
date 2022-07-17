@@ -45,6 +45,7 @@ const tech = computed(() => project.value.tech)
         <router-link v-if="previousProject" class="project__previous" :to="previousProject.route"
           >Previous</router-link
         >
+        <!-- <a :href="project.github" target="_blank">Github link</a> -->
         <router-link v-if="nextProject" class="project__next" :to="nextProject.route"
           >Next</router-link
         >
