@@ -8,6 +8,8 @@ export default {
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectContainer from 'components/ProjectContainer'
 
+import * as dat from 'dat.gui'
+
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
@@ -17,7 +19,6 @@ import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise'
 import gsap from 'gsap'
 
 import vertexShader from './shaders/basic.vert'
-
 import oceanFragmentShader from './shaders/ocean.frag'
 import oceanVertexShader from './shaders/ocean.vert'
 import moonFragmentShader from './shaders/moon.frag'
@@ -25,6 +26,9 @@ import moonVertexShader from './shaders/moon.vert'
 import mountainsFragmentShader from './shaders/mountains.frag'
 import mountainsVertexShader from './shaders/mountains.vert'
 import backdropFragmentShader from './shaders/backdrop.frag'
+
+// debug gui
+const moonLightPosition = new THREE.Vector3(0, 10, -200)
 
 const config = {
   cameraPosition: new THREE.Vector3(0.0, 10.0, 30.0),
@@ -90,10 +94,8 @@ const moonMaterial = new THREE.ShaderMaterial({
   transparent: true,
 })
 const moon = new THREE.Mesh(moonGeometry, moonMaterial)
-moon.position.z = -200
 moon.position.y = 10
-moonGeometry.computeBoundingBox()
-const moonCenter = moonGeometry.boundingBox.getCenter(new THREE.Vector3())
+moon.position.z = -200
 scene.add(moon)
 
 /**
@@ -112,6 +114,9 @@ const oceanMaterial = new THREE.ShaderMaterial({
     },
     uOceanFillColor: {
       value: config.colors.darkBlue,
+    },
+    uLightWorldPosition: {
+      value: moonLightPosition,
     },
   },
   extensions: {
@@ -201,18 +206,10 @@ scene.add(backdrop)
  */
 const fontLoader = new FontLoader()
 fontLoader.load('/assets/glsl/fonts/Streamster_Regular.json', (font) => {
-  // const textGeometry = new TextGeometry('Hello world', {
-  //   font: font,
-  //   size: 10,
-  //   height: 1,
-  //   curveSegments: 10,
-  // })
   const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff })
   const textShapes = font.generateShapes('Hello world', 10)
   const textGeometry = new THREE.ShapeGeometry(textShapes)
   textGeometry.computeBoundingBox()
-  // const textCenter = textGeometry.boundingBox.getCenter(new THREE.Vector3())
-  // text.position.x = -textCenter.x
   const textMiddle = -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x)
   textGeometry.translate(textMiddle, 0, 0)
   const text = new THREE.Mesh(textGeometry, textMaterial)
@@ -228,6 +225,13 @@ fontLoader.load('/assets/glsl/fonts/Streamster_Regular.json', (font) => {
 
 function init() {
   container.value.appendChild(renderer.domElement)
+
+  if (!window.gui) {
+    // window.gui = new dat.GUI()
+    // gui.add(moonLightPosition, 'x')
+    // gui.add(moonLightPosition, 'y')
+    // gui.add(moonLightPosition, 'z')
+  }
 }
 
 function animate(time) {
@@ -238,6 +242,7 @@ function animate(time) {
   )
   // controls.update()
   oceanMaterial.uniforms.uTime.value = time
+
   renderer.render(scene, camera)
 }
 
@@ -293,4 +298,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
+.dg.ac {
+  z-index: 999;
+}
 </style>

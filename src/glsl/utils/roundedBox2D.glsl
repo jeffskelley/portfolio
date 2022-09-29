@@ -3,7 +3,8 @@ float roundedBoxSDF(vec2 CenterPosition, vec2 Size, float Radius) {
   return length(max(abs(CenterPosition) - Size + Radius, 0.0)) - Radius;
 }
 
-float roundedBox2D(vec2 uv) {
+
+float roundedBox2D(vec2 uv, float radius) {
   // adapted from https://www.shadertoy.com/view/WtdSDs
   // The scale of the rectangle
   vec2 size = vec2(1.0, 1.0);
@@ -11,8 +12,6 @@ float roundedBox2D(vec2 uv) {
   vec2 location = vec2(0.0, 0.0);
   // How soft the edges should be (higher is softer)
   float edgeSoftness = 1.0;
-  // The radius of the corners
-  float radius = 0.01;
   // Calculate distance to edge
   float distance = roundedBoxSDF(uv.xy - location - (size / 2.0), size / 2.0, radius);
   // Smooth the result (free antialiasing)

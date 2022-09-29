@@ -18,8 +18,8 @@ const projectIndex = computed(() =>
 const project = computed(() => store.state.projects[projectIndex.value])
 const nextProject = computed(() => store.state.projects[projectIndex.value + 1])
 const previousProject = computed(() => store.state.projects[projectIndex.value - 1])
-const title = computed(() => project.value.title)
-const tech = computed(() => project.value.tech)
+const title = computed(() => project.value?.title)
+const tech = computed(() => project.value?.tech)
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const tech = computed(() => project.value.tech)
     </div>
 
     <div v-if="showInfo" class="project__info">
-      <header class="project__title">
+      <header v-if="title" class="project__title">
         <h1>{{ title }}</h1>
       </header>
       <ul class="project__tech">
@@ -41,7 +41,7 @@ const tech = computed(() => project.value.tech)
       <div class="project__description">
         <slot name="description"></slot>
       </div>
-      <footer class="project__footer">
+      <footer v-if="project" class="project__footer">
         <router-link v-if="previousProject" class="project__previous" :to="previousProject.route"
           >Previous</router-link
         >

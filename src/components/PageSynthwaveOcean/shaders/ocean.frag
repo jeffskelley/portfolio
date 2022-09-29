@@ -1,7 +1,10 @@
 varying vec3 vPosition;
+// varying vec3 vSurfaceToLight;
+// varying vec3 vNormal;
 
 uniform vec3 uOceanLineColor;
 uniform vec3 uOceanFillColor;
+
 
 void main() {
   /**
@@ -23,5 +26,15 @@ void main() {
 
   // mix between fill and lines
   vec3 color = mix(uOceanFillColor, uOceanLineColor, intensity);
+
+  /**
+   * Spotlight
+   */
+  // vec3 normal = normalize(vNormal);
+  // vec3 surfaceToLightDirection = normalize(vSurfaceToLight); // turn it around
+  // float light = dot(normal, surfaceToLightDirection);
+
+  // color *= light;
+
   gl_FragColor = vec4(color, 1.0);
 }

@@ -6,6 +6,9 @@ import DripMask from 'components/PageDripMask'
 import AlbumGrid from 'components/PageAlbumGrid'
 import GradientCircles from 'components/PageGradientCircles'
 
+import BambooAlbumGrid from 'components/PageBambooAlbumGrid'
+// import BambooStickerPeel from 'components/PageBambooStickerPeel'
+
 const routes = [
   { name: 'home', path: '/', component: Home },
 
@@ -16,11 +19,13 @@ const routes = [
     name: 'dripMask',
     path: '/drip-mask',
     component: DripMask,
-    // meta: { hasLightBackground: true },
   },
 
   { name: 'albumGrid', path: '/album-grid', component: AlbumGrid },
   { name: 'gradientCircles', path: '/gradient-circles', component: GradientCircles },
+
+  { name: 'bambooAlbumGrid', path: '/bamboo-album-grid', component: BambooAlbumGrid },
+  // { name: 'bambooStickerPeel', path: '/bamboo-sticker-peel', component: BambooStickerPeel },
 
   // 3d
   { name: 'synthwaveOcean', path: '/synthwave-ocean', component: SynthwaveOcean },
