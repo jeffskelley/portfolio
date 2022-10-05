@@ -144,7 +144,7 @@ const mountainsHeight = 50
 const mountainsGeometry = new THREE.PlaneGeometry(
   mountainsWidth,
   mountainsHeight,
-  mountainsWidth / 5,
+  mountainsWidth / 4,
   mountainsHeight / 5
 )
 
