@@ -8,27 +8,22 @@ export default {
 import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectContainer from 'components/ProjectContainer'
 
-import * as dat from 'dat.gui'
+// import * as dat from 'dat.gui'
 
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
-import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise'
+import SimplexNoise from 'simplex-noise'
 import gsap from 'gsap'
 
 import vertexShader from './shaders/basic.vert'
 import oceanFragmentShader from './shaders/ocean.frag'
 import oceanVertexShader from './shaders/ocean.vert'
+import mountainsFragmentShader from './shaders/mountains.frag'
 import moonFragmentShader from './shaders/moon.frag'
 import moonVertexShader from './shaders/moon.vert'
-import mountainsFragmentShader from './shaders/mountains.frag'
-import mountainsVertexShader from './shaders/mountains.vert'
 import backdropFragmentShader from './shaders/backdrop.frag'
-
-// debug gui
-const moonLightPosition = new THREE.Vector3(0, 10, -200)
 
 const config = {
   cameraPosition: new THREE.Vector3(0.0, 10.0, 30.0),
@@ -109,14 +104,11 @@ const oceanMaterial = new THREE.ShaderMaterial({
     uTime: {
       value: 0.0,
     },
-    uOceanLineColor: {
+    uLineColor: {
       value: config.colors.blue,
     },
-    uOceanFillColor: {
+    uFillColor: {
       value: config.colors.darkBlue,
-    },
-    uLightWorldPosition: {
-      value: moonLightPosition,
     },
   },
   extensions: {
@@ -152,30 +144,83 @@ const mountainsHeight = 50
 const mountainsGeometry = new THREE.PlaneGeometry(
   mountainsWidth,
   mountainsHeight,
-  mountainsWidth,
-  mountainsHeight
+  mountainsWidth / 5,
+  mountainsHeight / 5
 )
 
-const mountainsMaterial = new THREE.ShaderMaterial({
-  vertexShader: mountainsVertexShader,
+function cubicPulse(x, center, width) {
+  x = Math.abs(x - center)
+  if (x > width) {
+    return 0.0
+  }
+  x /= width
+  return 1.0 - x * x * (3.0 - 2.0 * x)
+}
+
+function initMountainsGeometry() {
+  const simplex = new SimplexNoise()
+  const positions = mountainsGeometry.attributes.position.array
+  const maxPoints = positions.length / 3
+  let x, y, z, index
+  x = y = z = index = 0
+  for (let i = 0; i < maxPoints; i++) {
+    x = positions[index++]
+    y = positions[index++]
+    z = positions[index++]
+
+    const uv = {
+      x: (x + mountainsWidth / 2) / mountainsWidth,
+      y: (y + mountainsHeight / 2) / mountainsHeight,
+    }
+    let displacement = (simplex.noise2D(uv.x * 10, uv.y * 3) + 1) / 2 // normalize to 0.0-1.0
+    displacement *= uv.y // fade in on y axis
+    displacement = displacement * (1.0 - cubicPulse(uv.x, 0.5, 0.2)) // carve out space for moon
+    positions[index - 1] += displacement * 30
+  }
+
+  mountainsGeometry.attributes.position.needsUpdate = true
+  mountainsGeometry.computeBoundingBox()
+  mountainsGeometry.computeBoundingSphere()
+}
+
+mountainsGeometry.addGroup(0, Infinity, 0)
+mountainsGeometry.addGroup(0, Infinity, 1)
+
+const mountainsMaterial = new THREE.MeshStandardMaterial({
+  color: new THREE.Color(config.colors.pink.x, config.colors.pink.y, config.colors.pink.z),
+  flatShading: true,
+})
+
+const mountainsGridMaterial = new THREE.ShaderMaterial({
+  vertexShader,
   fragmentShader: mountainsFragmentShader,
   uniforms: {
     uLineColor: {
       value: config.colors.purple,
     },
-    uFillColor: {
-      value: config.colors.black,
-    },
   },
   extensions: {
     derivatives: true,
   },
+  transparent: true,
 })
-const mountains = new THREE.Mesh(mountainsGeometry, mountainsMaterial)
+
+const mountains = new THREE.Mesh(mountainsGeometry, [mountainsMaterial, mountainsGridMaterial])
 mountains.rotation.x = -Math.PI / 2
 mountains.position.y = -1
 mountains.position.z = -150
 scene.add(mountains)
+
+const light = new THREE.PointLight(0xffffff, 0.5, 0, 2)
+light.position.x = moon.position.x
+light.position.y = moon.position.y
+light.position.z = moon.position.z + 40
+
+light.lookAt(moon.position)
+scene.add(light)
+
+// const helper = new THREE.PointLightHelper(light, 5)
+// scene.add(helper)
 
 /**
  * Backdrop
@@ -224,14 +269,8 @@ fontLoader.load('/assets/glsl/fonts/Streamster_Regular.json', (font) => {
  */
 
 function init() {
+  initMountainsGeometry()
   container.value.appendChild(renderer.domElement)
-
-  if (!window.gui) {
-    // window.gui = new dat.GUI()
-    // gui.add(moonLightPosition, 'x')
-    // gui.add(moonLightPosition, 'y')
-    // gui.add(moonLightPosition, 'z')
-  }
 }
 
 function animate(time) {

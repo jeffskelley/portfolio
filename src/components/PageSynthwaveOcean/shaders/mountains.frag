@@ -1,8 +1,5 @@
-// adapted from: https://madebyevan.com/shaders/grid/
-
 varying vec3 vPosition;
 uniform vec3 uLineColor;
-uniform vec3 uFillColor;
 
 void main() {
   // Pick a coordinate to visualize in a grid
@@ -19,6 +16,5 @@ void main() {
   intensity = pow(intensity, 1.0 / 2.2);
 
   // mix between
-  vec3 color = mix(uFillColor, uLineColor, intensity);
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = mix(vec4(0.0), vec4(uLineColor, 1.0), intensity);
 }
