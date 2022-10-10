@@ -8,7 +8,7 @@ export default {
 // flowmap is essentially my THREEjs port of https://github.com/oframe/ogl/blob/master/src/extras/Flowmap.js
 
 import { ref, onMounted, onUnmounted } from 'vue'
-import ProjectContainer from 'components/ProjectContainer'
+import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
 import basicVertexShader from './shaders/basic.vert'
@@ -233,5 +233,4 @@ onUnmounted(() => {
   </ProjectContainer>
 </template>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

@@ -1,5 +1,5 @@
 <script setup>
-import GlobalHeader from 'components/GlobalHeader'
+import GlobalHeader from '@/components/GlobalHeader.vue'
 </script>
 
 <template>

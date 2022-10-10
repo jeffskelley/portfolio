@@ -6,7 +6,7 @@ export default {
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import ProjectContainer from 'components/ProjectContainer'
+import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
 import gsap from 'gsap'
@@ -108,5 +108,4 @@ onUnmounted(() => {
   </ProjectContainer>
 </template>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

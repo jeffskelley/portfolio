@@ -8,8 +8,8 @@ export default {
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 // components
-import ProjectContainer from 'components/ProjectContainer'
-import ButtonSolid from 'components/ButtonSolid'
+import ProjectContainer from '@/components/ProjectContainer.vue'
+import ButtonSolid from '@/components/ButtonSolid.vue'
 
 // libs
 import * as THREE from 'three'

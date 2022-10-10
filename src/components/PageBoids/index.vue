@@ -6,7 +6,7 @@ export default {
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import ProjectContainer from 'components/ProjectContainer'
+import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
 import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'

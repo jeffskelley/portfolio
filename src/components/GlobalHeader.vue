@@ -1,5 +1,5 @@
 <script setup>
-import MenuToggle from 'components/MenuToggle'
+import MenuToggle from '@/components/MenuToggle.vue'
 </script>
 
 <template>

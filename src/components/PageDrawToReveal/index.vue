@@ -6,8 +6,8 @@ export default {
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import ProjectContainer from 'components/ProjectContainer'
-import ButtonSolid from 'components/ButtonSolid'
+import ProjectContainer from '@/components/ProjectContainer.vue'
+import ButtonSolid from '@/components/ButtonSolid.vue'
 
 import * as THREE from 'three'
 import basicVertexShader from './shaders/basic.vert'

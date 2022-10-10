@@ -10,8 +10,8 @@ import { ref, computed, onMounted } from 'vue'
 
 import SimplexNoise from 'simplex-noise'
 
-import ProjectContainer from 'components/ProjectContainer'
-import DripBackground from './DripBackground'
+import ProjectContainer from '@/components/ProjectContainer.vue'
+import DripBackground from './DripBackground.vue'
 
 const simplex = new SimplexNoise()
 

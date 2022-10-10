@@ -8,7 +8,7 @@ export default {
 import { ref, onMounted, onUnmounted } from 'vue'
 
 // components
-import ProjectContainer from 'components/ProjectContainer'
+import ProjectContainer from '@/components/ProjectContainer.vue'
 
 // shaders
 import vertexShader from './shaders/basic.vert'
