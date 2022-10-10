@@ -112,15 +112,17 @@ scene.add(mainMesh)
 /**
  * Assets
  */
+const IMAGE_PATH_1 = '/assets/img/reveal/night.jpg'
+const IMAGE_PATH_2 = '/assets/img/reveal/day.jpg'
 
-new THREE.TextureLoader().load('/assets/img/agencyea-reveal-1.jpg', (texture) => {
+new THREE.TextureLoader().load(IMAGE_PATH_1, (texture) => {
   mainMaterial.uniforms.tImage1.value = texture
   mainMaterial.uniforms.uImage1Dimensions.value = new THREE.Vector2(
     texture.source.data.width,
     texture.source.data.height
   )
 })
-new THREE.TextureLoader().load('/assets/img/agencyea-reveal-2.jpg', (texture) => {
+new THREE.TextureLoader().load(IMAGE_PATH_2, (texture) => {
   mainMaterial.uniforms.tImage2.value = texture
   mainMaterial.uniforms.uImage2Dimensions.value = new THREE.Vector2(
     texture.source.data.width,
@@ -131,6 +133,26 @@ new THREE.TextureLoader().load('/assets/img/agencyea-reveal-2.jpg', (texture) =>
 /**
  * Render Functions
  */
+function checkForComplete() {
+  /**
+   * Checks if the FBO has been completely covered.
+   */
+  const start = performance.now()
+  const target = targets.read
+  const { width, height } = target.texture.source.data
+  const buffer = new Float32Array(width * height * 4)
+  renderer.readRenderTargetPixels(target, 0, 0, width, height, buffer)
+
+  let complete = true
+  for (let i = 0; i < buffer.length; i += 4) {
+    if (buffer[i] !== 1) {
+      complete = false
+    }
+  }
+
+  console.log(complete)
+}
+
 function init() {
   container.value.appendChild(renderer.domElement)
 }

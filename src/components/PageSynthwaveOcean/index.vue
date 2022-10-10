@@ -275,9 +275,10 @@ function init() {
 
 function animate(time) {
   requestAnimationFrame(animate)
+
   camera.position.set(
     config.cameraPosition.x + mouse.x * config.mouseDelta.x,
-    config.cameraPosition.y + mouse.y * config.mouseDelta.y
+    config.cameraPosition.y + mouse.y * config.mouseDelta.y + Math.sin(time * 0.001) * 0.75
   )
   // controls.update()
   oceanMaterial.uniforms.uTime.value = time
