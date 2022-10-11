@@ -17,7 +17,6 @@ uniform sampler2D tImage9;
 uniform vec2 uMouse;
 uniform float uPreDistortionOffsetX;
 uniform float uPreDistortionOffsetY;
-// uniform float uAspect;
 uniform float uOffsetX;
 uniform float uOffsetY1;
 uniform float uOffsetY2;
@@ -79,17 +78,24 @@ void main() {
   uv = fract(uv); // repeat 0.0 - 1.0
 
   // per-column distortion
-  // improvement: redo without branching
-  if ( xIndex == 0.0 ) {
-    uv.y = (uv.y - 0.5) * pow(20.0, uDistortion1) + 0.5;
-    uv = brownConradyDistortion(uv, uDistortion1, 0.01);
-  } else if ( xIndex == 1.0 ) {
-    uv.y = (uv.y - 0.5) * pow(20.0, uDistortion2) + 0.5;
-    uv = brownConradyDistortion(uv, uDistortion2, 0.01);
-  } else if ( xIndex == 2.0 ) {
-    uv.y = (uv.y - 0.5) * pow(20.0, uDistortion3) + 0.5;
-    uv = brownConradyDistortion(uv, uDistortion3, 0.01);
-  }
+  vec2 col1uv = uv;
+  col1uv.y = (uv.y - 0.5) * pow(20.0, uDistortion1) + 0.5;
+  col1uv = brownConradyDistortion(col1uv, uDistortion1, 0.01);
+  vec2 col1uvDiff = col1uv - uv;
+
+  vec2 col2uv = uv;
+  col2uv.y = (uv.y - 0.5) * pow(20.0, uDistortion2) + 0.5;
+  col2uv = brownConradyDistortion(col2uv, uDistortion2, 0.01);
+  vec2 col2uvDiff = col2uv - uv;
+
+  vec2 col3uv = uv;
+  col3uv.y = (uv.y - 0.5) * pow(20.0, uDistortion3) + 0.5;
+  col3uv = brownConradyDistortion(col3uv, uDistortion3, 0.01);
+  vec2 col3uvDiff = col3uv - uv;
+
+  uv = uv + isIndex(xIndex, 0.0) * col1uvDiff;
+  uv = uv + isIndex(xIndex, 1.0) * col2uvDiff;
+  uv = uv + isIndex(xIndex, 2.0) * col3uvDiff;
   
   // add gutters
   uv *= (1.0 + uGutter);

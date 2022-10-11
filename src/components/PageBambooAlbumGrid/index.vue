@@ -240,6 +240,8 @@ function animate() {
     .to(bgUniforms.uOffsetX, { value: '-=8', duration: 4.5, ease: 'expo.out' }, 'start')
     .to(fgUniforms.uOffsetY1, { value: '+=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
     .to(bgUniforms.uOffsetY1, { value: '-=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
+    .to(fgUniforms.uOffsetY2, { value: '-=0.5', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
+    .to(bgUniforms.uOffsetY2, { value: '+=0.5', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
 
     // fade in gl cover
     .fromTo(
@@ -321,6 +323,7 @@ function animate() {
       },
       'subtitle'
     )
+    .call(flip, null, `-=2.5`)
 
   timeline.play(0)
 }
@@ -437,7 +440,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer ref="container" class="album-grid">
+  <ProjectContainer ref="container" class="album-grid" buttonColor="black">
     <div class="album-grid__content">
       <h1 class="album-grid__headline">Hello World</h1>
 
@@ -453,14 +456,17 @@ onUnmounted(() => {
 
     <div ref="glContainer" class="album-grid__gl-container"></div>
 
+    <template #actions>
+      <ButtonSolid color="black" @click="flip">Album change animation</ButtonSolid>
+      <ButtonSolid color="black" @click="animate">Replay intro animation</ButtonSolid>
+    </template>
+
     <template #description>
       <p>
         Detail from an app I built for a music streaming client that didn't go to production.
         Geometry is just two basic planes for the foreground and background, the 3D fisheye effect
         is created in the fragment shader.
       </p>
-      <ButtonSolid color="gray" @click="flip">Album change animation</ButtonSolid>
-      <ButtonSolid color="gray" @click="animate">Replay intro animation</ButtonSolid>
     </template>
   </ProjectContainer>
 </template>
@@ -521,6 +527,10 @@ onUnmounted(() => {
     bottom: 0;
     left: 0;
     z-index: 10;
+  }
+
+  .button:not(:first-child) {
+    margin-left: 15px;
   }
 }
 </style>

@@ -1,12 +1,105 @@
-$fontDisplay: 'Oswald', sans-serif;
+$fontDisplay: 'Montserrat', sans-serif;
 $fontBody: 'Merriweather', serif;
 
 body {
   font-family: $fontBody;
-  font-size: 16px;
-  line-height: 1.7;
 }
 
 p:not(:last-child) {
   margin-bottom: 1em;
+}
+
+.brand {
+  font-family: $fontDisplay;
+  &--large {
+    font-size: 57px;
+    line-height: 64px;
+  }
+  &--medium {
+    font-size: 45px;
+    line-height: 52px;
+  }
+  &--small {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}
+
+.headline {
+  font-family: $fontDisplay;
+  &--large {
+    font-size: 32px;
+    line-height: 40px;
+  }
+  &--medium {
+    font-size: 28px;
+    line-height: 36px;
+  }
+  &--small {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+.title {
+  font-family: $fontDisplay;
+  &--large {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  &--medium {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    letter-spacing: 0.015em;
+  }
+  &--small {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+}
+
+.body {
+  &--large {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.05em;
+  }
+  &--medium {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.025em;
+  }
+  &--small {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+  }
+}
+
+.label {
+  font-weight: 500;
+  &--large {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.01em;
+  }
+  &--medium {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+  }
+  &--small {
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.05em;
+  }
+}
+
+a {
+  color: $colorPrimary;
+  transition: color .1s ease;
+  &:hover { color: $colorPrimary; }
 }

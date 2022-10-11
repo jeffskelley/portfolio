@@ -193,7 +193,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="Lorem ipsum" :show-info="false">
+  <ProjectContainer :show-info="false">
     <div ref="container" class="container"></div>
 
     <!-- <canvas width="32" height="32" class="canvas" /> -->

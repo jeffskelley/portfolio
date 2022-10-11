@@ -4,11 +4,15 @@ defineProps({
     type: String,
     default: 'white',
   },
+  icon: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
 <template>
-  <button class="button" :class="`button--${color}`">
+  <button class="button label label--large" :class="[`button--${color}`, { 'button--icon': icon }]">
     <slot />
   </button>
 </template>
@@ -24,12 +28,9 @@ defineProps({
   cursor: pointer;
 
   // styles
-  font-family: $fontDisplay;
-  font-size: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   padding: 8px 35px;
-  border-radius: 25px;
+  border-radius: 18px;
+  height: 36px;
 
   transition-duration: background 0.3s;
   &:hover,
@@ -49,9 +50,21 @@ defineProps({
       background: rgb(150, 150, 150);
     }
   }
-  &--gray {
-    background: #999;
+  &--black {
+    background: rgb(25, 25, 25);
     color: #fff;
+    &:hover {
+      background: rgb(55, 55, 55);
+    }
+    &:active {
+      background: rgb(45, 45, 45);
+    }
+  }
+
+  &--icon {
+    padding-left: 0;
+    padding-right: 0;
+    width: 36px;
   }
 }
 </style>

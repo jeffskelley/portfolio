@@ -1,25 +1,41 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+
+import ButtonSolid from '@/components/ButtonSolid.vue'
 
 defineProps({
   showInfo: {
     type: Boolean,
     default: true,
   },
+  buttonColor: {
+    type: String,
+    default: 'black',
+  },
 })
 
 const store = useStore()
 const route = useRoute()
+
+// project
 const projectIndex = computed(() =>
   store.state.projects.findIndex((project) => project.route.name === route.name)
 )
 const project = computed(() => store.state.projects[projectIndex.value])
-const nextProject = computed(() => store.state.projects[projectIndex.value + 1])
-const previousProject = computed(() => store.state.projects[projectIndex.value - 1])
 const title = computed(() => project.value?.title)
 const tech = computed(() => project.value?.tech)
+
+// site navigation
+const nextProject = computed(() => store.state.projects[projectIndex.value + 1])
+const previousProject = computed(() => store.state.projects[projectIndex.value - 1])
+
+// popup
+const popupVisible = ref(false)
+function togglePopup() {
+  popupVisible.value = !popupVisible.value
+}
 </script>
 
 <template>
@@ -28,28 +44,37 @@ const tech = computed(() => project.value?.tech)
       <slot></slot>
     </div>
 
-    <div v-if="showInfo" class="project__info">
-      <header v-if="title" class="project__title">
-        <h1>{{ title }}</h1>
-      </header>
-      <ul class="project__tech">
-        <li v-for="item in tech" :key="item">
-          {{ item }}
-        </li>
-      </ul>
+    <div class="project__actions">
+      <slot name="actions" />
+    </div>
 
-      <div class="project__description">
-        <slot name="description"></slot>
+    <div v-if="showInfo" class="project__info-container">
+      <ButtonSolid icon :color="buttonColor" class="project__info-toggle" @click="togglePopup">
+        <span class="sr-only">Show project info</span>
+        <span class="project__info-icon">i</span>
+      </ButtonSolid>
+      <div v-if="popupVisible" class="project__info">
+        <header v-if="title" class="project__title">
+          <h1>{{ title }}</h1>
+        </header>
+        <ul class="project__tech">
+          <li v-for="item in tech" :key="item">
+            {{ item }}
+          </li>
+        </ul>
+
+        <div class="project__description">
+          <slot name="description"></slot>
+        </div>
+        <footer v-if="project" class="project__footer">
+          <router-link v-if="previousProject" class="project__previous" :to="previousProject.route"
+            >Previous</router-link
+          >
+          <router-link v-if="nextProject" class="project__next" :to="nextProject.route"
+            >Next</router-link
+          >
+        </footer>
       </div>
-      <footer v-if="project" class="project__footer">
-        <router-link v-if="previousProject" class="project__previous" :to="previousProject.route"
-          >Previous</router-link
-        >
-        <!-- <a :href="project.github" target="_blank">Github link</a> -->
-        <router-link v-if="nextProject" class="project__next" :to="nextProject.route"
-          >Next</router-link
-        >
-      </footer>
     </div>
   </section>
 </template>
@@ -60,11 +85,18 @@ const tech = computed(() => project.value?.tech)
     position: relative;
     z-index: 10;
   }
-  &__info {
+  &__info-container {
     position: fixed;
     bottom: 25px;
     right: 25px;
     z-index: 100;
+  }
+  &__info-icon {
+    font-family: $fontBody;
+    font-weight: 700;
+    font-size: 20px;
+  }
+  &__info {
     width: 100%;
     max-width: 350px;
     padding: 15px;
@@ -106,6 +138,13 @@ const tech = computed(() => project.value?.tech)
   }
   &__next {
     margin-left: auto;
+  }
+
+  &__actions {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    z-index: 100;
   }
 }
 </style>

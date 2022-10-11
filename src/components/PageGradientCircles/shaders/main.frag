@@ -50,6 +50,5 @@ void main() {
   vec3 circle1 = gradientCircle(uv, vec2(0.2, 0.2), screenAspect, 0.6, 0.0);
   vec3 circle2 = gradientCircle(uv, vec2(0.8, 0.8), screenAspect, 0.15, 0.5);
   vec3 color = blendSubtract(circle1, circle2);
-  // vec3 color = gradientCircle(uv, vec2(0.5, 0.5), screenAspect, 0.5);
   gl_FragColor = vec4(color, 1.0);
 }

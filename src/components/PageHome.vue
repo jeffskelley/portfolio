@@ -1,19 +1,28 @@
 <script setup>
-
+import store from '@/store'
 </script>
 
 <template>
   <article class="page-home">
     <div class="page-home__inner">
       <header class="page-home__header">
-        <h1>Jeff Kelley</h1>
+        <h1 class="brand brand--large">Jeff Kelley</h1>
 
-        <p>Creative development experiments and work samples</p>
+        <p class="headline headline--large">
+          Creative development<br />
+          experiments and work samples
+        </p>
       </header>
 
-      <section class="page-home__section">
+      <section class="page-home__section body body--large">
         <ul>
-          <li>
+          <li v-for="project in store.state.projects" :key="project.id">
+            <router-link class="page-home__link" :to="project.route">
+              <span class="title title--large">{{ project.title }}</span>
+              <span class="title title--small">({{ project.tech.join(', ') }})</span>
+            </router-link>
+          </li>
+          <!-- <li>
             <router-link class="page-home__link" :to="{ name: 'albumGrid' }"
               >Fisheye Album Art Grid (WebGL, GLSL, Three.JS)</router-link
             >
@@ -37,7 +46,7 @@
             <router-link class="page-home__link" :to="{ name: 'synthwaveOcean' }"
               >Synthwave ocean (WebGL, GLSL, Three.JS)</router-link
             >
-          </li>
+          </li> -->
         </ul>
       </section>
     </div>
@@ -63,35 +72,16 @@
     margin: 0 0 2em;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    font-family: $fontDisplay;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-
   h1 {
-    margin-top: 0;
-    font-size: 3.052rem;
+    margin-bottom: 5px;
   }
 
-  h2 {
-    font-size: 2.441rem;
-  }
+  li {
+    margin: 0.5em 0;
 
-  h3 {
-    font-size: 1.953rem;
-  }
-
-  h4 {
-    font-size: 1.563rem;
-  }
-
-  h5 {
-    font-size: 1.25rem;
+    .title {
+      display: block;
+    }
   }
 }
 </style>

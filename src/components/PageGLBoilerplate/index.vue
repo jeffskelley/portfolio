@@ -99,7 +99,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="Lorem ipsum" :tech="['Lorem ipsum']">
+  <ProjectContainer>
     <div ref="container" class="container"></div>
 
     <template #description>

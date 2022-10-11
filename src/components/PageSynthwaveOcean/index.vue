@@ -326,7 +326,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="Synthwave Ocean" :tech="['WebGL', 'GLSL', 'ThreeJS']">
+  <ProjectContainer>
     <div ref="container" class="container"></div>
 
     <template #description>

@@ -221,7 +221,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="Liquid text" :tech="['WebGL', 'GLSL', 'ThreeJS']">
+  <ProjectContainer buttonColor="white">
     <div ref="container" class="container"></div>
 
     <template #description>

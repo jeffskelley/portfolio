@@ -236,24 +236,21 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer title="Draw to Reveal" :tech="['WebGL', 'GLSL', 'ThreeJS']">
+  <ProjectContainer buttonColor="white">
     <div ref="container" class="container" @mousedown="mousedown" @mousemove="mousemove"></div>
-    <ButtonSolid class="reset" @click="reset">Reset</ButtonSolid>
+
+    <template #actions>
+      <ButtonSolid color="white" class="reset" @click="reset">Reset</ButtonSolid>
+    </template>
 
     <template #description>
       <p>Click and draw to reveal a second image.</p>
       <p>
         Created for an experiential marketing agency as a way to show off spaces before and after
         they were transformed.
-      </p></template
-    >
+      </p>
+    </template>
   </ProjectContainer>
 </template>
 
-<style lang="scss">
-.reset {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
-</style>
+<style lang="scss"></style>
