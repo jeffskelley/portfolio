@@ -529,7 +529,7 @@ onUnmounted(() => {
     z-index: 10;
   }
 
-  .button:not(:first-child) {
+  .project__actions .button:not(:first-child) {
     margin-left: 15px;
   }
 }

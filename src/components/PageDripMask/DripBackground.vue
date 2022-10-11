@@ -77,14 +77,18 @@ function getMask(progress) {
  */
 
 function generateSegments() {
+  const time = new Date().getTime()
+  const dripSpeed = 0.0005
+  const sinSpeed = 0.0005
+
   segments.value = [...new Array(horizontalSegments)].map((_, i) => {
     const segmentProgress = (i + 1) / horizontalSegments
     return {
       x: segmentProgress * width.value,
       // general wave shape
       deltaY:
-        simplex.noise2D(segmentProgress * width.value, new Date().getTime()) * dripSize + // randomized ridges
-        Math.sin(segmentProgress * Math.PI * 2) * sineWaveSize, // general sin wave shape
+        simplex.noise2D(segmentProgress * width.value, time * dripSpeed) * dripSize + // randomized ridges
+        Math.sin(segmentProgress * Math.PI * 2) * sineWaveSize * Math.sin(time * sinSpeed), // general sin wave shape
     }
   })
 }
@@ -122,13 +126,19 @@ function resize() {
   generateSegments()
 }
 
+function animate() {
+  requestAnimationFrame(animate)
+  generateSegments()
+  draw()
+}
+
 /**
  * Lifecycle
  */
 onMounted(async () => {
   resize()
   await nextTick()
-  draw()
+  animate()
 })
 </script>
 

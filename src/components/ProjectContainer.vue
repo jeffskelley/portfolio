@@ -32,9 +32,9 @@ const nextProject = computed(() => store.state.projects[projectIndex.value + 1])
 const previousProject = computed(() => store.state.projects[projectIndex.value - 1])
 
 // popup
-const popupVisible = ref(false)
-function togglePopup() {
-  popupVisible.value = !popupVisible.value
+const showingPopover = computed(() => store.state.showingPopover)
+function togglePopover() {
+  store.state.showingPopover = !store.state.showingPopover
 }
 </script>
 
@@ -49,11 +49,7 @@ function togglePopup() {
     </div>
 
     <div v-if="showInfo" class="project__info-container">
-      <ButtonSolid icon :color="buttonColor" class="project__info-toggle" @click="togglePopup">
-        <span class="sr-only">Show project info</span>
-        <span class="project__info-icon">i</span>
-      </ButtonSolid>
-      <div v-if="popupVisible" class="project__info">
+      <div v-if="showingPopover" class="project__info">
         <header v-if="title" class="project__title">
           <h1>{{ title }}</h1>
         </header>
@@ -75,6 +71,10 @@ function togglePopup() {
           >
         </footer>
       </div>
+      <ButtonSolid icon :color="buttonColor" class="project__info-toggle" @click="togglePopover">
+        <span class="sr-only">Show project info</span>
+        <span class="project__info-icon">i</span>
+      </ButtonSolid>
     </div>
   </section>
 </template>
@@ -96,10 +96,15 @@ function togglePopup() {
     font-weight: 700;
     font-size: 20px;
   }
+  &__info-toggle {
+    display: block;
+    margin: 0 0 0 auto;
+  }
   &__info {
     width: 100%;
     max-width: 350px;
     padding: 15px;
+    margin-bottom: 15px;
 
     border-radius: 5px;
     background: #fff;

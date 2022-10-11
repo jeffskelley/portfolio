@@ -10,6 +10,7 @@ function uniqueId(prefix) {
 const store = createStore({
   state() {
     return {
+      showingPopover: false,
       projects: [
         {
           id: uniqueId('project-'),
