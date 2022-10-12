@@ -14,8 +14,6 @@ import basicVertexShader from './shaders/basic.vert'
 import maskFragmentShader from './shaders/mask.frag'
 import mainFragmentShader from './shaders/main.frag'
 
-import gsap from 'gsap'
-
 const config = {
   cameraPosition: new THREE.Vector3(0.0, 0.0, 0.0),
 }

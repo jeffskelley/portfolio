@@ -10,6 +10,7 @@ import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
 import { GPUComputationRenderer } from 'three/addons/misc/GPUComputationRenderer.js'
+import getViewSizeAtDepth from '@/helpers/getViewSizeAtDepth'
 
 import vertexShader from './shaders/basic.vert'
 import boidMapFragmentShader from './shaders/boidMap.frag'
@@ -37,15 +38,6 @@ let gpuCompute
 let positionVelocityVariable
 let positionVelocityUniforms
 const SIZE = 1024 // must be a power of 2
-
-/**
- * Helper functions
- */
-function getViewSizeAtDepth(camera, depth = 0) {
-  const fovInRadians = (camera.fov * Math.PI) / 180
-  const height = Math.abs((camera.position.z - depth) * Math.tan(fovInRadians / 2) * 2)
-  return { width: height * camera.aspect, height }
-}
 
 let randomSeed = new Date().getTime()
 window.Math.random = function () {

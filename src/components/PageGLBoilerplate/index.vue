@@ -10,9 +10,10 @@ import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
 import gsap from 'gsap'
+// import getViewSizeAtDepth from '@/helpers/getViewSizeAtDepth'
 
 const config = {
-  cameraPosition: new THREE.Vector3(0.0, 10.0, 30.0),
+  cameraPosition: new THREE.Vector3(0.0, 0.0, 1.0),
   mouseDelta: { x: 6.0, y: 2.0 },
 }
 

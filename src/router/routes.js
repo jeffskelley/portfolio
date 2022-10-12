@@ -6,6 +6,7 @@ import DripMask from '@/components/PageDripMask'
 import GradientCircles from '@/components/PageGradientCircles'
 import BambooAlbumGrid from '@/components/PageBambooAlbumGrid'
 
+import ParticleTorrent from '@/components/PageParticleTorrent'
 import Boids from '@/components/PageBoids'
 import BambooStickerPeel from '@/components/PageBambooStickerPeel'
 
@@ -21,6 +22,7 @@ const routes = [
     component: DripMask,
   },
   { name: 'boids', path: '/boids', component: Boids },
+  { name: 'particleTorrent', path: '/particle-torrent', component: ParticleTorrent },
 
   // 3d
   { name: 'synthwaveOcean', path: '/synthwave-ocean', component: SynthwaveOcean },

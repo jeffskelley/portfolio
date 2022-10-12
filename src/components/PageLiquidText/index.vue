@@ -11,6 +11,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
+import getViewSizeAtDepth from '@/helpers/getViewSizeAtDepth'
 import basicVertexShader from './shaders/basic.vert'
 import flowmapFragmentShader from './shaders/flowmap.frag'
 import mainFragmentShader from './shaders/main.frag'
@@ -45,15 +46,6 @@ const velocity = new THREE.Vector2()
 const velocityTweened = new THREE.Vector2()
 const lastMouse = new THREE.Vector2()
 let lastTime = null
-
-/**
- * Helper functions
- */
-function getViewSizeAtDepth(camera, depth = 0) {
-  const fovInRadians = (camera.fov * Math.PI) / 180
-  const height = Math.abs((camera.position.z - depth) * Math.tan(fovInRadians / 2) * 2)
-  return { width: height * camera.aspect, height }
-}
 
 /**
  * Render Targets

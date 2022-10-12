@@ -331,7 +331,8 @@ onUnmounted(() => {
 
     <template #description>
       <p>
-        Utilizes custom-written GLSL shaders to procedurally generate ocean surface and mountains.
+        Exploring different ways of using noise to generate mountain terrain, a field of stars, and
+        an ocean.
       </p>
     </template>
   </ProjectContainer>

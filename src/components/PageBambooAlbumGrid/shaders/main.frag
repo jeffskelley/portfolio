@@ -53,7 +53,6 @@ vec4 getImage(in vec2 uv, in float index) {
 }
 
 void main() {
-  // float aspect = uAspect;
   vec2 uv = vUV;
   uv += vec2(uPreDistortionOffsetX, uPreDistortionOffsetY);
   uv = brownConradyDistortion(uv, uFisheye, uFisheye2); // add distortion
@@ -64,6 +63,7 @@ void main() {
 
   // add total x offset
   uv.x += uOffsetX;
+  
   // add offset to cols
   uv.y += step(1., mod(uv.x, 2.0)) * (uOffsetY1 + uScroll * uScrollAmt);
   uv.y += (1.0 - step(1., mod(uv.x, 2.0))) * (uOffsetY2 - uScroll * uScrollAmt);

@@ -16,6 +16,7 @@ import fragmentShader from './shaders/main.frag'
 
 import * as THREE from 'three'
 import gsap from 'gsap'
+import getViewSizeAtDepth from '@/helpers/getViewSizeAtDepth'
 
 // config
 const colors = {
@@ -43,15 +44,6 @@ const uTime = ref(0)
 
 // mouse values will be between -1 and 1
 let mouse = { x: 0, y: 0 }
-
-/**
- * Helper functions
- */
-function getViewSizeAtDepth(camera, depth = 0) {
-  const fovInRadians = (camera.fov * Math.PI) / 180
-  const height = Math.abs((camera.position.z - depth) * Math.tan(fovInRadians / 2) * 2)
-  return { width: height * camera.aspect, height }
-}
 
 /**
  * Mesh

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import SimplexNoise from 'simplex-noise'
 const simplex = new SimplexNoise()
 
@@ -94,25 +94,27 @@ function generateSegments() {
 }
 
 function draw() {
-  const ctx = canvas.value.getContext('2d')
+  if (canvas.value) {
+    const ctx = canvas.value.getContext('2d')
 
-  for (let i = 0; i < verticalSegments; i++) {
-    const color = colors[i % colors.length]
-    const points = getMask((verticalSegments - i + 1) / verticalSegments)
-    ctx.beginPath()
-    ctx.fillStyle = color
-    ctx.strokeStyle = 'rgb(0, 0, 0)'
-    points.forEach((point) => {
-      if (point.action === 'M') {
-        ctx.moveTo(point.x, point.y)
-      } else if (point.action === 'L') {
-        ctx.lineTo(point.x, point.y)
-      } else if (point.action === 'C') {
-        ctx.bezierCurveTo(point.x1, point.y1, point.x2, point.y2, point.x, point.y)
-      }
-    })
-    ctx.fill()
-    ctx.stroke()
+    for (let i = 0; i < verticalSegments; i++) {
+      const color = colors[i % colors.length]
+      const points = getMask((verticalSegments - i + 1) / verticalSegments)
+      ctx.beginPath()
+      ctx.fillStyle = color
+      ctx.strokeStyle = 'rgb(0, 0, 0)'
+      points.forEach((point) => {
+        if (point.action === 'M') {
+          ctx.moveTo(point.x, point.y)
+        } else if (point.action === 'L') {
+          ctx.lineTo(point.x, point.y)
+        } else if (point.action === 'C') {
+          ctx.bezierCurveTo(point.x1, point.y1, point.x2, point.y2, point.x, point.y)
+        }
+      })
+      ctx.fill()
+      ctx.stroke()
+    }
   }
 }
 
@@ -126,8 +128,11 @@ function resize() {
   generateSegments()
 }
 
+let running = true
 function animate() {
-  requestAnimationFrame(animate)
+  if (running) {
+    requestAnimationFrame(animate)
+  }
   generateSegments()
   draw()
 }
@@ -137,8 +142,12 @@ function animate() {
  */
 onMounted(async () => {
   resize()
-  await nextTick()
+  // await nextTick()
   animate()
+})
+
+onUnmounted(() => {
+  running = false
 })
 </script>
 

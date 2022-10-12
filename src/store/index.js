@@ -42,6 +42,13 @@ const store = createStore({
         },
         {
           id: uniqueId('project-'),
+          route: { name: 'particleTorrent' },
+          title: 'Particle Torrent',
+          tech: ['WebGL', 'GLSL', 'Three.JS', 'FBOs'],
+          github: `${projectRoot}/components/PageParticleTorrent`,
+        },
+        {
+          id: uniqueId('project-'),
           route: { name: 'dripMask' },
           title: 'SVG Drip Mask',
           tech: ['SVG', 'GSAP', 'Canvas'],
