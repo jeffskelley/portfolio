@@ -9,12 +9,14 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import ProjectContainer from '@/components/ProjectContainer.vue'
 
 import * as THREE from 'three'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import getViewSizeAtDepth from '@/helpers/getViewSizeAtDepth'
 
 import mainVertexShader from './shaders/main.vert'
 import mainFragmentShader from './shaders/main.frag'
 import bufferFragmentShader from './shaders/buffer.frag'
+import basicVertexShader from './shaders/basic.vert'
+import circleFragmentShader from './shaders/circle.frag'
 
 // config
 const PARTICLE_COUNT = Math.pow(2, 18)
@@ -42,7 +44,13 @@ const camera = new THREE.PerspectiveCamera()
 camera.position.set(0, 0, 1)
 camera.lookAt(0, 0, 0)
 
-// const controls = new OrbitControls(camera, renderer.domElement)
+const orbitCamera = new THREE.PerspectiveCamera()
+orbitCamera.position.set(0, 0, 2)
+orbitCamera.lookAt(0, 0, 0)
+
+const controls = new OrbitControls(orbitCamera, renderer.domElement)
+controls.autoRotateSpeed = -3.0
+controls.autoRotate = true
 
 /**
  * Render Targets
@@ -132,6 +140,17 @@ const material = new THREE.ShaderMaterial({
 const mesh = new THREE.Points(geometry, material)
 scene.add(mesh)
 
+const circle = new THREE.Mesh(
+  new THREE.PlaneGeometry(2, 2),
+  new THREE.ShaderMaterial({
+    vertexShader: basicVertexShader,
+    fragmentShader: circleFragmentShader,
+    transparent: true,
+    side: THREE.DoubleSide,
+  })
+)
+scene.add(circle)
+
 const outputMesh = new THREE.Mesh(
   new THREE.PlaneGeometry(1, 1),
   new THREE.MeshBasicMaterial({ map: targets.read.texture })
@@ -150,9 +169,10 @@ function init() {
 function animate(time) {
   requestAnimationFrame(animate)
   material.uniforms.uTime.value = time
+  controls.update()
 
   renderer.setRenderTarget(initialTarget)
-  renderer.render(scene, camera)
+  renderer.render(scene, orbitCamera)
 
   renderer.setRenderTarget(targets.write)
   renderer.render(bufferScene, camera)
@@ -173,6 +193,9 @@ function resize() {
   camera.aspect = windowWidth / windowHeight
   camera.updateProjectionMatrix()
 
+  orbitCamera.aspect = windowWidth / windowHeight
+  orbitCamera.updateProjectionMatrix()
+
   initialRenderer.setSize(1080, 1080)
   renderer.setSize(windowWidth, windowHeight)
 
@@ -181,6 +204,8 @@ function resize() {
   mesh.scale.set(maxSize, maxSize)
   outputMesh.scale.set(viewSize.width, viewSize.height)
 }
+
+// window.orbitCamera = orbitCamera
 
 /**
  * Lifecycle
@@ -204,8 +229,8 @@ onUnmounted(() => {
 
     <template #description>
       <p>
-        An experiment that includes displacing vertices and feedback using ping-ponging between
-        FBOs.
+        An experiment with displacing particles in the vertex shader. Also utilizes ping-pong FBOs
+        to create motion blur.
       </p>
     </template>
   </ProjectContainer>
