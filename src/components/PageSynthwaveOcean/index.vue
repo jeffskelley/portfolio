@@ -11,8 +11,10 @@ import ProjectContainer from '@/components/ProjectContainer.vue'
 // import * as dat from 'dat.gui'
 
 import * as THREE from 'three'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-// import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
+
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import SimplexNoise from 'simplex-noise'
 import gsap from 'gsap'
@@ -37,6 +39,12 @@ const config = {
     white: new THREE.Vector3(1.0, 1.0, 1.0),
     black: new THREE.Vector3(0.0, 0.0, 0.0),
   },
+  bloom: {
+    exposure: 2.5,
+    strength: 0.7,
+    threshold: 0.5,
+    radius: 1,
+  },
 }
 
 let randomSeed = new Date().getTime()
@@ -55,6 +63,9 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
 })
 renderer.setPixelRatio(window.devicePixelRatio)
+// renderer.toneMapping = THREE.ReinhardToneMapping
+// renderer.toneMappingExposure = config.bloom.exposure
+const composer = new EffectComposer(renderer)
 
 const camera = new THREE.PerspectiveCamera()
 camera.position.set(config.cameraPosition.x, config.cameraPosition.y, config.cameraPosition.z)
@@ -261,12 +272,20 @@ fontLoader.load('/assets/glsl/fonts/Streamster_Regular.json', (font) => {
   text.position.y = -0.5
   text.position.z = -50
 
-  scene.add(text)
+  // scene.add(text)
 })
 
 /**
  * Render Functions
  */
+
+const renderPass = new RenderPass(scene, camera)
+composer.addPass(renderPass)
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(windowWidth, windowHeight), 1.5, 0.5, 0.85)
+bloomPass.threshold = config.bloom.threshold
+bloomPass.strength = config.bloom.strength
+bloomPass.radius = config.bloom.radius
+composer.addPass(bloomPass)
 
 function init() {
   initMountainsGeometry()
@@ -283,7 +302,8 @@ function animate(time) {
   // controls.update()
   oceanMaterial.uniforms.uTime.value = time
 
-  renderer.render(scene, camera)
+  // renderer.render(scene, camera)
+  composer.render()
 }
 
 /**
@@ -305,6 +325,7 @@ function resize() {
   camera.aspect = windowWidth / windowHeight
   camera.updateProjectionMatrix()
   renderer.setSize(windowWidth, windowHeight)
+  composer.setSize(windowWidth, windowHeight)
 }
 
 /**

@@ -28,10 +28,10 @@ const store = createStore({
         },
         {
           id: uniqueId('project-'),
-          route: { name: 'drawToReveal' },
-          title: 'Draw to Reveal',
+          route: { name: 'particleTorrent' },
+          title: 'Particle Torrent',
           tech: ['WebGL', 'GLSL', 'Three.JS', 'FBOs'],
-          github: `${projectRoot}/components/PageDrawToReveal`,
+          github: `${projectRoot}/components/PageParticleTorrent`,
         },
         {
           id: uniqueId('project-'),
@@ -42,10 +42,10 @@ const store = createStore({
         },
         {
           id: uniqueId('project-'),
-          route: { name: 'particleTorrent' },
-          title: 'Particle Torrent',
+          route: { name: 'drawToReveal' },
+          title: 'Draw to Reveal',
           tech: ['WebGL', 'GLSL', 'Three.JS', 'FBOs'],
-          github: `${projectRoot}/components/PageParticleTorrent`,
+          github: `${projectRoot}/components/PageDrawToReveal`,
         },
         {
           id: uniqueId('project-'),
