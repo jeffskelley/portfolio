@@ -32,4 +32,5 @@ void main() {
   displacement *= 1.0 - distanceFromCenter;
   vec4 newMvPosition = vec4(mvPosition.xy + displacement, mvPosition.z, mvPosition.w);
   gl_Position = projectionMatrix * newMvPosition;
+  gl_PointSize = 1.;
 }

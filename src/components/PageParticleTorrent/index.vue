@@ -17,6 +17,7 @@ import mainFragmentShader from './shaders/main.frag'
 import bufferFragmentShader from './shaders/buffer.frag'
 import basicVertexShader from './shaders/basic.vert'
 import circleFragmentShader from './shaders/circle.frag'
+import testFragmentShader from './shaders/test.frag'
 
 // config
 const PARTICLE_COUNT = Math.pow(2, 18)
@@ -112,9 +113,9 @@ const geometry = new THREE.PlaneGeometry(1, 1, Math.sqrt(PARTICLE_COUNT), Math.s
 // Slightly randomize initial positions of vertices
 const positions = geometry.attributes.position.array
 for (let i = 0; i < positions.length; i += 3) {
-  const x = positions[i]
-  const y = positions[i + 1]
-  const z = positions[i + 2]
+  // const x = positions[i]
+  // const y = positions[i + 1]
+  // const z = positions[i + 2]
 
   const displacement = {
     x: (Math.random() - 0.5) * 0.005,
@@ -141,7 +142,7 @@ const mesh = new THREE.Points(geometry, material)
 scene.add(mesh)
 
 const circle = new THREE.Mesh(
-  new THREE.PlaneGeometry(2, 2),
+  new THREE.PlaneGeometry(1, 1),
   new THREE.ShaderMaterial({
     vertexShader: basicVertexShader,
     fragmentShader: circleFragmentShader,
@@ -170,6 +171,8 @@ function animate(time) {
   requestAnimationFrame(animate)
   material.uniforms.uTime.value = time
   controls.update()
+
+  // renderer.render(scene, orbitCamera)
 
   renderer.setRenderTarget(initialTarget)
   renderer.render(scene, orbitCamera)
@@ -202,10 +205,9 @@ function resize() {
   const viewSize = getViewSizeAtDepth(camera, 0)
   const maxSize = Math.max(viewSize.width, viewSize.height)
   mesh.scale.set(maxSize, maxSize)
+  circle.scale.set(maxSize, maxSize)
   outputMesh.scale.set(viewSize.width, viewSize.height)
 }
-
-// window.orbitCamera = orbitCamera
 
 /**
  * Lifecycle
