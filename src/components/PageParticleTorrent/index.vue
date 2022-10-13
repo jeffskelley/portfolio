@@ -234,6 +234,16 @@ onUnmounted(() => {
         An experiment with displacing particles in the vertex shader. Also utilizes ping-pong FBOs
         to create motion blur.
       </p>
+      <p>
+        Inspired by a
+        <a href="https://www.simonaa.media/tutorials/looping-noise-part-1">Simon Alexander-Adams</a>
+        TouchDesigner port of an
+        <a
+          href="https://necessarydisorder.wordpress.com/2017/11/15/drawing-from-noise-and-then-making-animated-loopy-gifs-from-there/"
+          >Étienne Jacob</a
+        >
+        piece created in Processing. Here I've re-recreated the piece in WebGL.
+      </p>
     </template>
   </ProjectContainer>
 </template>

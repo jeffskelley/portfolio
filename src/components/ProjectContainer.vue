@@ -51,7 +51,7 @@ function togglePopover() {
     <div v-if="showInfo" class="project__info-container">
       <div v-if="showingPopover" class="project__info">
         <header v-if="title" class="project__title">
-          <h1>{{ title }}</h1>
+          <h1 class="headline headline--large">{{ title }}</h1>
         </header>
         <ul class="project__tech">
           <li v-for="item in tech" :key="item">
@@ -109,19 +109,6 @@ function togglePopover() {
     border-radius: 5px;
     background: #fff;
     box-shadow: 0 0 15px rgba(#000, 0.25);
-
-    h1 {
-      font-family: $fontDisplay;
-      font-weight: bold;
-      font-size: 25px;
-      text-transform: uppercase;
-      letter-spacing: 0.025em;
-      margin-bottom: 5px;
-    }
-    p {
-      font-size: 14px;
-      line-height: 1.5;
-    }
   }
 
   &__tech {
