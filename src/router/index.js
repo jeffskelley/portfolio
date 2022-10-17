@@ -7,4 +7,12 @@ const router = createRouter({
   routes,
 })
 
+router.afterEach(({ meta }) => {
+  if (meta.noScroll) {
+    document.body.classList.add('no-scroll')
+  } else {
+    document.body.classList.remove('no-scroll')
+  }
+})
+
 export default router

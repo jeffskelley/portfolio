@@ -527,7 +527,7 @@ onUnmounted(() => {
 <template>
   <ProjectContainer
     ref="container"
-    class="album-grid"
+    class="album-grid no-select"
     :class="{ 'album-grid--is-dragging': isDragging }"
     button-color="black"
   >
@@ -536,8 +536,8 @@ onUnmounted(() => {
 
       <div>
         <p class="album-grid__subtitle headline headline--medium">
-          Click and drag anywhere on the browser window to move the grid. Give it a spin! Or don't,
-          that's cool too.
+          Click and drag anywhere on the browser window to spin the grid. Give it a spin! Or don't,
+          that's fine too.
         </p>
       </div>
     </div>
@@ -562,9 +562,6 @@ onUnmounted(() => {
 
 <style lang="scss">
 .album-grid {
-  // no select
-  -webkit-user-select: none;
-  user-select: none;
   cursor: grab;
   &--is-dragging {
     cursor: grabbing;
