@@ -189,6 +189,13 @@ function animate(time) {
 /**
  * Events
  */
+const isDragging = ref(false)
+function mousedown() {
+  isDragging.value = true
+}
+function mouseup() {
+  isDragging.value = false
+}
 
 function resize() {
   windowWidth = window.innerWidth
@@ -226,7 +233,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ProjectContainer>
+  <ProjectContainer
+    class="particle-torrent"
+    :class="{ 'particle-torrent--is-dragging': isDragging }"
+    @mousedown="mousedown"
+    @mouseup="mouseup"
+  >
     <div ref="container" class="container"></div>
 
     <template #description>
@@ -248,4 +260,11 @@ onUnmounted(() => {
   </ProjectContainer>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.particle-torrent {
+  cursor: grab;
+  &--is-dragging {
+    cursor: grabbing;
+  }
+}
+</style>
