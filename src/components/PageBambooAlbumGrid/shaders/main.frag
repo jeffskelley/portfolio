@@ -18,6 +18,7 @@ uniform vec2 uMouse;
 uniform float uPreDistortionOffsetX;
 uniform float uPreDistortionOffsetY;
 uniform float uOffsetX;
+uniform float uOffsetY;
 uniform float uOffsetY1;
 uniform float uOffsetY2;
 uniform float uDistortion1;
@@ -61,8 +62,9 @@ void main() {
   uv += uMouse * uMouseAmt; // add mouse offset
   uv /= uWidth; // scale up
 
-  // add total x offset
+  // add total initial x and y offset
   uv.x += uOffsetX;
+  uv.y += uOffsetY;
   
   // add offset to cols
   uv.y += step(1., mod(uv.x, 2.0)) * (uOffsetY1 + uScroll * uScrollAmt);

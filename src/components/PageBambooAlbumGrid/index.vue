@@ -37,15 +37,6 @@ const distortion3 = 0
 const uMouse = reactive({ x: 0, y: 0 })
 
 /**
- * GSAP Timeline initialization
- */
-const timeline = gsap
-  .timeline()
-  .addLabel('start', 0)
-  .addLabel('subtitle', `+=${8 / 30}`)
-  .pause(0)
-
-/**
  * Scene initialization
  */
 let windowWidth = window.innerWidth
@@ -83,6 +74,7 @@ const material = new THREE.ShaderMaterial({
     uPreDistortionOffsetX: { value: 0 },
     uPreDistortionOffsetY: { value: 0 },
     uOffsetX: { value: offsetX },
+    uOffsetY: { value: 0 },
     uOffsetY1: { value: offsetY1 },
     uOffsetY2: { value: offsetY2 },
     uDistortion1: { value: distortion1 },
@@ -120,6 +112,7 @@ const bgMaterial = new THREE.ShaderMaterial({
     uPreDistortionOffsetX: { value: 0 },
     uPreDistortionOffsetY: { value: 0 },
     uOffsetX: { value: offsetX },
+    uOffsetY: { value: 0 },
     uOffsetY1: { value: offsetY1 },
     uOffsetY2: { value: offsetY2 },
     uDistortion1: { value: distortion1 },
@@ -215,10 +208,35 @@ function render() {
   renderer.render(scene, camera)
 }
 
+const timeline = gsap
+  .timeline()
+  .addLabel('start', 0)
+
+  // grid animation
+  .to(material.uniforms.uOffsetX, { value: '+=8', duration: 4.5, ease: 'expo.out' }, 'start')
+  .to(bgMaterial.uniforms.uOffsetX, { value: '-=8', duration: 4.5, ease: 'expo.out' }, 'start')
+  .to(material.uniforms.uOffsetY1, { value: '+=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
+  .to(
+    bgMaterial.uniforms.uOffsetY1,
+    { value: '-=1', duration: 3.5, ease: 'expo.out' },
+    'start+=0.25'
+  )
+  .to(
+    material.uniforms.uOffsetY2,
+    { value: '-=0.5', duration: 3.5, ease: 'expo.out' },
+    'start+=0.25'
+  )
+  .to(
+    bgMaterial.uniforms.uOffsetY2,
+    { value: '+=0.5', duration: 3.5, ease: 'expo.out' },
+    'start+=0.25'
+  )
+  .call(flip, null, `-=2.5`)
+
+  .pause(0)
+
 function animate() {
   const el = container.value.$el
-  const fgUniforms = material.uniforms
-  const bgUniforms = bgMaterial.uniforms
   const { lines: headlineLines } = new SplitType(el.querySelector('.album-grid__headline'), {
     types: 'lines',
   })
@@ -226,42 +244,37 @@ function animate() {
     types: 'lines',
   })
 
-  timeline
-    // grid animation
-    .to(fgUniforms.uOffsetX, { value: '+=8', duration: 4.5, ease: 'expo.out' }, 'start')
-    .to(bgUniforms.uOffsetX, { value: '-=8', duration: 4.5, ease: 'expo.out' }, 'start')
-    .to(fgUniforms.uOffsetY1, { value: '+=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
-    .to(bgUniforms.uOffsetY1, { value: '-=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
-    .to(fgUniforms.uOffsetY2, { value: '-=0.5', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
-    .to(bgUniforms.uOffsetY2, { value: '+=0.5', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
-
+  const typeTimeline =
     // fade in gl cover
-    .fromTo(
-      el.querySelector('.album-grid__cover'),
-      {
-        opacity: 0.2,
-      },
-      {
-        opacity: 1,
-        duration: 35 / 30,
-        ease: 'power1.out',
-      },
-      'start'
-    )
-    .to(
-      el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
-      {
-        opacity: 1,
-        duration: 0,
-      },
-      'start'
-    )
+    gsap
+      .timeline()
+      .addLabel('subtitle', `+=${8 / 30}`)
+      .fromTo(
+        el.querySelector('.album-grid__cover'),
+        {
+          opacity: 0.2,
+        },
+        {
+          opacity: 1,
+          duration: 35 / 30,
+          ease: 'power1.out',
+        },
+        'start'
+      )
+      .to(
+        el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
+        {
+          opacity: 1,
+          duration: 0,
+        },
+        'start'
+      )
 
   // headline animation
   headlineLines.forEach((line, index) => {
     const delay = 8 / 30
     const x = index === 0 ? '100px' : '-100px'
-    timeline
+    typeTimeline
       .fromTo(
         line,
         {
@@ -288,7 +301,7 @@ function animate() {
       )
   })
 
-  timeline
+  typeTimeline
     .fromTo(
       subtitleLines,
       {
@@ -315,8 +328,6 @@ function animate() {
       },
       'subtitle'
     )
-    .call(flip, null, `-=2.5`)
-
   timeline.play(0)
 }
 
@@ -324,13 +335,89 @@ function animate() {
  * Events
  */
 
+const dragSpeed = 5
+const isDragging = ref(false)
+let dragTimeline
+let lastClientX
+let lastClientY
+let lastDeltas = []
 function mousemove({ clientX, clientY }) {
-  gsap.to(uMouse, {
-    x: clientX / window.innerWidth,
-    y: (clientY / window.innerHeight) * -1,
-    duration: 1,
-    ease: 'power1.out',
-  })
+  if (isDragging.value) {
+    const deltaX = lastClientX - clientX
+    const deltaY = lastClientY - clientY
+
+    material.uniforms.uOffsetX.value += (deltaX / windowWidth) * dragSpeed
+    bgMaterial.uniforms.uOffsetX.value -= (deltaX / windowWidth) * dragSpeed
+
+    material.uniforms.uOffsetY.value -= (deltaY / windowHeight) * dragSpeed
+    bgMaterial.uniforms.uOffsetY.value += (deltaY / windowHeight) * dragSpeed
+
+    lastClientX = clientX
+    lastClientY = clientY
+    lastDeltas = [{ x: deltaX, y: deltaY }, ...lastDeltas.slice(0, 9)]
+  } else {
+    gsap.to(uMouse, {
+      x: clientX / window.innerWidth,
+      y: (clientY / window.innerHeight) * -1,
+      duration: 1,
+      ease: 'power1.out',
+    })
+  }
+}
+
+function mousedown({ clientX, clientY, target }) {
+  if (['BUTTON', 'A'].indexOf(target.tagName) === -1) {
+    timeline.pause()
+    if (dragTimeline) {
+      dragTimeline.kill()
+    }
+  }
+  isDragging.value = true
+  lastDeltas = []
+  lastClientX = clientX
+  lastClientY = clientY
+}
+
+function mouseup() {
+  isDragging.value = false
+
+  const sumDeltas = lastDeltas.reduce(
+    (sum, value) => {
+      return {
+        x: (sum.x += value.x),
+        y: (sum.y += value.y),
+      }
+    },
+    { x: 0, y: 0 }
+  )
+  const averageDeltas = {
+    x: sumDeltas.x / lastDeltas.length,
+    y: sumDeltas.y / lastDeltas.length,
+  }
+
+  if (!isNaN(averageDeltas.x)) {
+    const cardinalityX = averageDeltas.x > 0 ? '+' : '-'
+    const x = `${cardinalityX}=${(Math.abs(averageDeltas.x) / windowWidth) * 100}`
+    const cardinalityY = averageDeltas.y > 0 ? '-' : '+'
+    const y = `${cardinalityY}=${(Math.abs(averageDeltas.y) / windowWidth) * 100}`
+
+    dragTimeline = gsap
+      .timeline()
+      .to(material.uniforms.uOffsetX, {
+        value: x,
+        duration: 1.5,
+        ease: 'power2.out',
+      })
+      .to(
+        material.uniforms.uOffsetY,
+        {
+          value: y,
+          duration: 1.5,
+          ease: 'power2.out',
+        },
+        0
+      )
+  }
 }
 
 function resize() {
@@ -422,24 +509,35 @@ onMounted(() => {
   render()
   window.addEventListener('resize', resize)
   window.addEventListener('mousemove', mousemove)
+  window.addEventListener('mousedown', mousedown)
+  window.addEventListener('mouseup', mouseup)
+  window.addEventListener('mouseleave', mouseup)
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', resize)
   window.removeEventListener('mousemove', mousemove)
+  window.removeEventListener('mousedown', mousedown)
+  window.removeEventListener('mouseup', mouseup)
+  window.removeEventListener('mouseleave', mouseup)
   renderer.forceContextLoss()
 })
 </script>
 
 <template>
-  <ProjectContainer ref="container" class="album-grid" buttonColor="black">
+  <ProjectContainer
+    ref="container"
+    class="album-grid"
+    :class="{ 'album-grid--is-dragging': isDragging }"
+    button-color="black"
+  >
     <div class="album-grid__content">
       <h1 class="album-grid__headline">Hello World</h1>
 
       <div>
-        <p class="album-grid__subtitle">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, nesciunt laboriosam
-          architecto illo facilis rem quaerat maxime? Iste facilis.
+        <p class="album-grid__subtitle headline headline--medium">
+          Click and drag anywhere on the browser window to move the grid. Give it a spin! Or don't,
+          that's cool too.
         </p>
       </div>
     </div>
@@ -449,13 +547,12 @@ onUnmounted(() => {
     <div ref="glContainer" class="album-grid__gl-container"></div>
 
     <template #actions>
-      <ButtonSolid color="black" @click="flip">Album change animation</ButtonSolid>
-      <ButtonSolid color="black" @click="animate">Replay intro animation</ButtonSolid>
+      <ButtonSolid color="black" @click="flip">Swap album covers</ButtonSolid>
     </template>
 
     <template #description>
       <p>
-        Detail from an app I built for a music streaming client that didn't go to production.
+        Detail from an app I built for a music-oriented client that didn't go to production.
         Geometry is just two basic planes for the foreground and background, the 3D fisheye effect
         is created in the fragment shader.
       </p>
@@ -465,6 +562,14 @@ onUnmounted(() => {
 
 <style lang="scss">
 .album-grid {
+  // no select
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  &--is-dragging {
+    cursor: grabbing;
+  }
+
   &__content {
     position: relative;
     z-index: 30;
@@ -474,6 +579,11 @@ onUnmounted(() => {
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
+
+    .line {
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
+    }
   }
 
   &__headline {
@@ -491,10 +601,6 @@ onUnmounted(() => {
   }
 
   &__subtitle {
-    font-size: 28px;
-    font-weight: 700;
-    line-height: math.div(34, 28);
-    letter-spacing: -0.02em;
     text-align: center;
     margin: 72px auto 50px;
     max-width: 550px;
