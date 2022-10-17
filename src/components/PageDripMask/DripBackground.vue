@@ -78,8 +78,8 @@ function getMask(progress) {
 
 function generateSegments() {
   const time = new Date().getTime()
-  const dripSpeed = 0.0005
-  const sinSpeed = 0.0005
+  const dripSpeed = 0.0001
+  const sinSpeed = 0.0003
 
   segments.value = [...new Array(horizontalSegments)].map((_, i) => {
     const segmentProgress = (i + 1) / horizontalSegments
