@@ -354,7 +354,7 @@ function mousemove({ clientX, clientY }) {
 
     lastClientX = clientX
     lastClientY = clientY
-    lastDeltas = [{ x: deltaX, y: deltaY }, ...lastDeltas.slice(0, 9)]
+    lastDeltas = [{ x: deltaX, y: deltaY }, ...lastDeltas.slice(0, 3)]
   } else {
     gsap.to(uMouse, {
       x: clientX / window.innerWidth,

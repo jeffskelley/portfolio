@@ -10,12 +10,13 @@ function uniqueId(prefix) {
 const store = createStore({
   state() {
     return {
+      introHasPlayed: false,
       showingPopover: false,
       projects: [
         {
           id: uniqueId('project-'),
           route: { name: 'albumGrid' },
-          title: 'Fisheye Album Art Grid',
+          title: 'Fisheye Album Grid',
           tech: ['WebGL', 'GLSL', 'Three.JS', 'GSAP'],
           github: `${projectRoot}/components/PageAlbumGrid`,
         },

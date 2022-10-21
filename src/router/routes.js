@@ -5,6 +5,7 @@ import DrawToReveal from '@/components/PageDrawToReveal'
 import DripMask from '@/components/PageDripMask'
 import GradientCircles from '@/components/PageGradientCircles'
 import BambooAlbumGrid from '@/components/PageBambooAlbumGrid'
+import HomeBackground from '@/components/HomeBackground'
 
 import ParticleTorrent from '@/components/PageParticleTorrent'
 import Boids from '@/components/PageBoids'
@@ -54,6 +55,12 @@ const routes = [
     name: 'gradientCircles',
     path: '/gradient-circles',
     component: GradientCircles,
+    meta: { noScroll: true },
+  },
+  {
+    name: 'pageHomeBackground',
+    path: '/page-home-background',
+    component: HomeBackground,
     meta: { noScroll: true },
   },
 ]
