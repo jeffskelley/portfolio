@@ -80,7 +80,6 @@ function mouseenter(index) {
       outChars,
       {
         opacity: 0.2,
-        // y: 15,
         ease: 'power4.out',
         stagger: distributeByPosition({
           amount: 0.25,
@@ -118,7 +117,6 @@ function mouseleave() {
     stagger: distributeByPosition({
       amount: 0.25,
       from: 'center',
-      ease: 'power2.out',
     }),
   })
   // gsap.timeline().to(chars, {
@@ -209,15 +207,25 @@ $offwhite: rgb(247, 236, 226);
 
     z-index: 10;
     font-family: $fontDisplay;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 12px 0 8px;
 
-    font-size: 20px;
+    font-size: 16px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     font-style: italic;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      padding: 15px;
+      font-size: 18px;
+    }
+
+    @media (min-width: 1024px) {
+      padding: 20px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+    }
 
     &-border {
       position: absolute;
@@ -239,21 +247,38 @@ $offwhite: rgb(247, 236, 226);
     &-title {
       color: $offwhite;
       opacity: 0;
+      display: block;
+      margin: 10px 0;
       &:nth-child(1) {
-        position: absolute;
-        left: 10px;
-        bottom: 20px;
-        transform: translateX(50px);
+        display: none;
       }
+
+      @media (min-width: 1024px) {
+        &:nth-child(1) {
+          position: absolute;
+          left: 10px;
+          bottom: 20px;
+          transform: translateX(50px);
+          display: block;
+        }
+        &:nth-child(3) {
+          position: absolute;
+          right: 10px;
+          bottom: 20px;
+          transform: translateX(-50px);
+        }
+      }
+
       &:nth-child(2) {
-        font-size: 32px;
+        font-size: 24px;
         margin: 0 auto;
-      }
-      &:nth-child(3) {
-        position: absolute;
-        right: 10px;
-        bottom: 20px;
-        transform: translateX(-50px);
+        @media (min-width: 768px) {
+          font-size: 28px;
+        }
+
+        @media (min-width: 1024px) {
+          font-size: 32px;
+        }
       }
     }
   }
@@ -264,18 +289,32 @@ $offwhite: rgb(247, 236, 226);
 
   &__list-item {
     display: block;
-    padding: 20px 0;
+    padding: 10px 0;
+    @media (min-width: 768px) {
+      padding: 15px 0;
+    }
+    @media (min-width: 1024px) {
+      padding: 20px 0;
+    }
   }
 
   &__link {
     display: inline-block;
     font-family: $fontDisplay;
     font-weight: 800;
-    font-size: 84px;
+    font-size: 28px;
     line-height: 0.8;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: $offwhite;
+
+    @media (min-width: 768px) {
+      font-size: 64px;
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 84px;
+    }
 
     &:hover,
     &:focus {
