@@ -265,7 +265,7 @@ function animate() {
         el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
         {
           opacity: 1,
-          duration: 0,
+          duration: 0.0001,
         },
         'start'
       )
