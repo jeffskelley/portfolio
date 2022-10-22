@@ -244,31 +244,32 @@ function animate() {
     types: 'lines',
   })
 
-  const typeTimeline =
+  const typeTimeline = gsap
+    .timeline()
+    .pause()
+    .addLabel('subtitle', `+=${8 / 30}`)
+
     // fade in gl cover
-    gsap
-      .timeline()
-      .addLabel('subtitle', `+=${8 / 30}`)
-      .fromTo(
-        el.querySelector('.album-grid__cover'),
-        {
-          opacity: 0.2,
-        },
-        {
-          opacity: 1,
-          duration: 35 / 30,
-          ease: 'power1.out',
-        },
-        'start'
-      )
-      .to(
-        el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
-        {
-          opacity: 1,
-          duration: 0.0001,
-        },
-        'start'
-      )
+    .fromTo(
+      el.querySelector('.album-grid__cover'),
+      {
+        opacity: 0.2,
+      },
+      {
+        opacity: 1,
+        duration: 35 / 30,
+        ease: 'power1.out',
+      },
+      'start'
+    )
+    .to(
+      el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
+      {
+        opacity: 1,
+        duration: 0,
+      },
+      'start'
+    )
 
   // headline animation
   headlineLines.forEach((line, index) => {
@@ -328,6 +329,7 @@ function animate() {
       },
       'subtitle'
     )
+  typeTimeline.play()
   timeline.play(0)
 }
 
