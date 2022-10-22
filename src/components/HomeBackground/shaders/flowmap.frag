@@ -9,7 +9,6 @@ uniform vec2 uVelocity;
 varying vec2 vUV;
 
 void main() {
-  vec3 flow = texture2D(tMap, vUV).rgb;
   vec4 color = texture2D(tMap, vUV) * uDissipation;
   vec2 cursor = vUV - uMouse;
   cursor.x *= uAspect;

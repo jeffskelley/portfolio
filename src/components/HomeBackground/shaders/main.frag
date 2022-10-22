@@ -2,7 +2,7 @@ varying vec2 vUV;
 
 uniform float uTime;
 uniform float uAspect;
-uniform sampler2D tMask;
+uniform sampler2D tMap;
 
 #pragma glslify: snoise2 = require(glsl-noise/simplex/3d)
 
@@ -26,11 +26,13 @@ vec4 blendOver(vec4 a, vec4 b) {
 }
 
 void main() {
-  float mask = texture2D(tMask, vUV).r;
+  vec4 flow = texture2D(tMap, vUV);
   vec2 uv = vUV;
   // uv = uv * 2.0 - 1.0;
   uv.x *= uAspect;
   // uv = uv / 2.0 + 0.5;
+
+  uv += flow.xy * -1.0 * 0.2; // distort
 
   float time = uTime * speed;
   
@@ -43,8 +45,6 @@ void main() {
     noise2
   );
   vec4 blended = blendOver(vec4(color1, noise2blurred), vec4(color2, 1.0));
-  vec3 color = mix(blended.rgb, color3, mask);
-  gl_FragColor = vec4(color, 1.0);
-
-  // gl_FragColor = vec4(texture2D(tMask, vUV).rbg, 1.0);
+  // vec3 color = mix(blended.rgb, color3, mask);
+  gl_FragColor = vec4(blended.rgb, 1.0);
 }

@@ -2,16 +2,18 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 import * as THREE from 'three'
+import gsap from 'gsap'
 
 import vertexShader from './shaders/basic.vert'
 import fragmentShader from './shaders/main.frag'
-import maskFragmentShader from './shaders/mask.frag'
+// import maskFragmentShader from './shaders/mask.frag'
+import flowmapFragmentShader from './shaders/flowmap.frag'
 
 let windowWidth = window.innerWidth
 let windowHeight = window.innerHeight
 const container = ref(null)
 const scene = new THREE.Scene()
-const maskScene = new THREE.Scene()
+const flowmapScene = new THREE.Scene()
 
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
@@ -27,13 +29,18 @@ camera.lookAt(0, 0, -1)
 /**
  * Global Refs
  */
-const uTime = ref(0)
-const uAspect = ref(1)
+const uTime = { value: 0 }
+const uAspect = { value: windowWidth / windowHeight }
+const tMap = { value: null }
+const mouse = new THREE.Vector2() // mouse values will be between 0 and 1
+const velocity = new THREE.Vector2()
+const velocityTweened = new THREE.Vector2()
+const lastMouse = new THREE.Vector2()
+let lastTime = null
 
 /**
  * Render Targets
  */
-const tMask = { value: null }
 const targetOptions = {
   depthBuffer: false,
   stencilBuffer: false,
@@ -48,32 +55,51 @@ const targets = {
     const temp = targets.read
     targets.read = targets.write
     targets.write = temp
-    tMask.value = targets.read.texture
+    tMap.value = targets.read.texture
   },
 }
 
 /**
  * Interaction Layer
  */
-let mouseMovedThisFrame = false
-const lastMouse = [-1, -1]
-const mouse = [-1, -1]
-const mouseVelocity = [0, 0]
-const maskMaterial = new THREE.ShaderMaterial({
+// let mouseMovedThisFrame = false
+// const lastMouse = [-1, -1]
+// const mouse = [-1, -1]
+// const mouseVelocity = [0, 0]
+
+// const maskMaterial = new THREE.ShaderMaterial({
+//   vertexShader,
+//   fragmentShader: maskFragmentShader,
+//   uniforms: {
+//     tMask,
+//     uFalloff: { value: 0.01 },
+//     uAspect: { value: windowWidth / windowHeight },
+//     uDimensions: { value: new THREE.Vector2(windowWidth, windowHeight) },
+//     uMouse: { value: mouse },
+//     uMouseVelocity: { value: mouseVelocity },
+//   },
+// })
+// const maskMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), maskMaterial)
+// maskMesh.position.z = -1.0
+// maskScene.add(maskMesh)
+
+const flowmapMaterial = new THREE.ShaderMaterial({
   vertexShader,
-  fragmentShader: maskFragmentShader,
+  fragmentShader: flowmapFragmentShader,
   uniforms: {
-    tMask,
-    uFalloff: { value: 0.01 },
-    uAspect: { value: windowWidth / windowHeight },
-    uDimensions: { value: new THREE.Vector2(windowWidth, windowHeight) },
+    tMap,
+    uTime,
+    uAspect,
+    uFalloff: { value: 0.15 },
+    uDissipation: { value: 0.97 },
+    uAlpha: { value: 1.0 },
     uMouse: { value: mouse },
-    uMouseVelocity: { value: mouseVelocity },
+    uVelocity: { value: velocityTweened },
   },
 })
-const maskMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 1, 1), maskMaterial)
-maskMesh.position.z = -1.0
-maskScene.add(maskMesh)
+const flowmapMesh = new THREE.Mesh(new THREE.PlaneGeometry(), flowmapMaterial)
+flowmapMesh.position.z = -1.0
+flowmapScene.add(flowmapMesh)
 
 /**
  * Display Layer
@@ -82,7 +108,7 @@ const material = new THREE.ShaderMaterial({
   vertexShader,
   fragmentShader,
   uniforms: {
-    tMask,
+    tMap,
     uTime,
     uAspect,
   },
@@ -103,27 +129,19 @@ function animate(time) {
   requestAnimationFrame(animate)
   uTime.value = time
 
-  if (mouseMovedThisFrame) {
-    mouseMovedThisFrame = false
-    mouseVelocity[0] = mouse[0] - lastMouse[0]
-    mouseVelocity[1] = mouse[1] - lastMouse[1]
-  } else {
-    mouse[0] = -1
-    mouse[1] = -1
+  if (!velocity.needsUpdate) {
+    mouse.set(-1)
+    velocity.set(0)
   }
+  velocity.needsUpdate = false
 
   renderer.setRenderTarget(targets.write)
-  renderer.render(maskScene, camera)
+  renderer.render(flowmapScene, camera)
 
   renderer.setRenderTarget(null)
   renderer.render(scene, camera)
 
   targets.swap()
-
-  if (mouseMovedThisFrame) {
-    lastMouse[0] = mouse[0]
-    lastMouse[1] = mouse[1]
-  }
 }
 
 /**
@@ -139,12 +157,32 @@ function resize() {
 }
 
 function mousemove(event) {
-  const { pageX, pageY } = event
-  const newX = pageX / windowWidth
-  const newY = 1 - pageY / windowHeight
-  mouse[0] = newX
-  mouse[1] = newY
-  mouseMovedThisFrame = true
+  const { clientX, clientY } = event
+
+  mouse.set(clientX / windowWidth, 1 - clientY / windowHeight)
+
+  // Calculate velocity
+  if (!lastTime) {
+    // First frame
+    lastTime = performance.now()
+    lastMouse.set(clientX, clientY)
+  }
+
+  const deltaX = clientX - lastMouse.x
+  const deltaY = clientY - lastMouse.y
+
+  lastMouse.set(clientX, clientY)
+
+  const time = performance.now()
+
+  // Avoid dividing by 0
+  const delta = Math.max(14, time - lastTime)
+  lastTime = time
+  velocity.set(deltaX / delta, deltaY / delta)
+  gsap.to(velocityTweened, { x: velocity.x, y: velocity.y, duration: 0.5 })
+
+  // Flag update to prevent hanging velocity values when not moving
+  velocity.needsUpdate = true
 }
 
 /**
