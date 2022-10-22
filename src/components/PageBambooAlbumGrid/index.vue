@@ -208,13 +208,17 @@ function render() {
   renderer.render(scene, camera)
 }
 
+const rotateTimeline = gsap
+  .timeline()
+  .to(material.uniforms.uOffsetX, { value: '+=8', duration: 4.5, ease: 'expo.out' }, 'start')
+  .to(bgMaterial.uniforms.uOffsetX, { value: '-=8', duration: 4.5, ease: 'expo.out' }, 'start')
+  .pause(0)
+
 const timeline = gsap
   .timeline()
   .addLabel('start', 0)
 
   // grid animation
-  .to(material.uniforms.uOffsetX, { value: '+=8', duration: 4.5, ease: 'expo.out' }, 'start')
-  .to(bgMaterial.uniforms.uOffsetX, { value: '-=8', duration: 4.5, ease: 'expo.out' }, 'start')
   .to(material.uniforms.uOffsetY1, { value: '+=1', duration: 3.5, ease: 'expo.out' }, 'start+=0.25')
   .to(
     bgMaterial.uniforms.uOffsetY1,
@@ -236,101 +240,102 @@ const timeline = gsap
   .pause(0)
 
 function animate() {
-  const el = container.value.$el
-  const { lines: headlineLines } = new SplitType(el.querySelector('.album-grid__headline'), {
-    types: 'lines',
-  })
-  const { lines: subtitleLines } = new SplitType(el.querySelector('.album-grid__subtitle'), {
-    types: 'lines',
-  })
+  // const el = container.value.$el
+  // const { lines: headlineLines } = new SplitType(el.querySelector('.album-grid__headline'), {
+  //   types: 'lines',
+  // })
+  // const { lines: subtitleLines } = new SplitType(el.querySelector('.album-grid__subtitle'), {
+  //   types: 'lines',
+  // })
 
-  const typeTimeline = gsap
-    .timeline()
-    .pause()
-    .addLabel('subtitle', `+=${8 / 30}`)
+  // const typeTimeline = gsap
+  //   .timeline()
+  //   .pause()
+  //   .addLabel('subtitle', `+=${8 / 30}`)
 
-    // fade in gl cover
-    .fromTo(
-      el.querySelector('.album-grid__cover'),
-      {
-        opacity: 0.2,
-      },
-      {
-        opacity: 1,
-        duration: 35 / 30,
-        ease: 'power1.out',
-      },
-      'start'
-    )
-    .to(
-      el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
-      {
-        opacity: 1,
-        duration: 0,
-      },
-      'start'
-    )
+  //   // fade in gl cover
+  //   .fromTo(
+  //     el.querySelector('.album-grid__cover'),
+  //     {
+  //       opacity: 0.2,
+  //     },
+  //     {
+  //       opacity: 1,
+  //       duration: 35 / 30,
+  //       ease: 'power1.out',
+  //     },
+  //     'start'
+  //   )
+  //   .to(
+  //     el.querySelectorAll('.album-grid__headline, .album-grid__subtitle'),
+  //     {
+  //       opacity: 1,
+  //       duration: 0,
+  //     },
+  //     'start'
+  //   )
 
-  // headline animation
-  headlineLines.forEach((line, index) => {
-    const delay = 8 / 30
-    const x = index === 0 ? '100px' : '-100px'
-    typeTimeline
-      .fromTo(
-        line,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-          ease: 'power2.out',
-          duration: 1,
-        },
-        `start+=${delay * index}`
-      )
-      .fromTo(
-        line,
-        {
-          x,
-        },
-        {
-          x: '0px',
-          ease: 'power2.out',
-          duration: 25 / 30,
-        },
-        `start+=${delay * index}`
-      )
-  })
+  // // headline animation
+  // headlineLines.forEach((line, index) => {
+  //   const delay = 8 / 30
+  //   const x = index === 0 ? '100px' : '-100px'
+  //   typeTimeline
+  //     .fromTo(
+  //       line,
+  //       {
+  //         opacity: 0,
+  //       },
+  //       {
+  //         opacity: 1,
+  //         ease: 'power2.out',
+  //         duration: 1,
+  //       },
+  //       `start+=${delay * index}`
+  //     )
+  //     .fromTo(
+  //       line,
+  //       {
+  //         x,
+  //       },
+  //       {
+  //         x: '0px',
+  //         ease: 'power2.out',
+  //         duration: 25 / 30,
+  //       },
+  //       `start+=${delay * index}`
+  //     )
+  // })
 
-  typeTimeline
-    .fromTo(
-      subtitleLines,
-      {
-        opacity: 0,
-      },
-      {
-        opacity: 1,
-        duration: 8 / 30,
-        ease: 'power1.in',
-        stagger: 3 / 30,
-      },
-      'subtitle'
-    )
-    .fromTo(
-      subtitleLines,
-      {
-        y: '50px',
-      },
-      {
-        y: '0px',
-        duration: 25 / 30,
-        ease: 'circ.out',
-        stagger: 3 / 30,
-      },
-      'subtitle'
-    )
-  typeTimeline.play()
-  timeline.play(0)
+  // typeTimeline
+  //   .fromTo(
+  //     subtitleLines,
+  //     {
+  //       opacity: 0,
+  //     },
+  //     {
+  //       opacity: 1,
+  //       duration: 8 / 30,
+  //       ease: 'power1.in',
+  //       stagger: 3 / 30,
+  //     },
+  //     'subtitle'
+  //   )
+  //   .fromTo(
+  //     subtitleLines,
+  //     {
+  //       y: '50px',
+  //     },
+  //     {
+  //       y: '0px',
+  //       duration: 25 / 30,
+  //       ease: 'circ.out',
+  //       stagger: 3 / 30,
+  //     },
+  //     'subtitle'
+  //   )
+  // typeTimeline.play()
+  timeline.play()
+  rotateTimeline.play()
 }
 
 /**
@@ -356,7 +361,7 @@ function mousemove({ clientX, clientY }) {
 
     lastClientX = clientX
     lastClientY = clientY
-    lastDeltas = [{ x: deltaX, y: deltaY }, ...lastDeltas.slice(0, 3)]
+    lastDeltas = [{ x: deltaX, y: deltaY }, ...lastDeltas.slice(0, 2)]
   } else {
     gsap.to(uMouse, {
       x: clientX / window.innerWidth,
@@ -369,7 +374,7 @@ function mousemove({ clientX, clientY }) {
 
 function mousedown({ clientX, clientY, target }) {
   if (['BUTTON', 'A'].indexOf(target.tagName) === -1) {
-    timeline.pause()
+    rotateTimeline.pause()
     if (dragTimeline) {
       dragTimeline.kill()
     }
@@ -554,10 +559,11 @@ onUnmounted(() => {
 
     <template #description>
       <p>
-        Detail from an app I built for a music-oriented client that didn't go to production.
+        Detail from an app I built for a music streaming client that didn't go to production.
         Geometry is just two basic planes for the foreground and background, the 3D fisheye effect
-        is created in the fragment shader.
+        is achieved in the fragment shader.
       </p>
+      <p>Click and drag to spin the grid.</p>
     </template>
   </ProjectContainer>
 </template>
@@ -614,7 +620,7 @@ onUnmounted(() => {
     height: 100vh;
     background: linear-gradient(to bottom, rgba(#000, 0.6) 0%, rgba(#000, 0.9) 70%, rgba(#000, 1));
     z-index: 20;
-    opacity: 0.2;
+    opacity: 0.6;
   }
 
   &__gl-container {
