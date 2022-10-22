@@ -43,17 +43,17 @@ const store = createStore({
         },
         {
           id: uniqueId('project-'),
-          route: { name: 'drawToReveal' },
-          title: 'Draw to Reveal',
-          tech: ['WebGL', 'GLSL', 'Three.JS', 'FBOs'],
-          github: `${projectRoot}/components/PageDrawToReveal`,
-        },
-        {
-          id: uniqueId('project-'),
           route: { name: 'dripMask' },
           title: 'SVG Drip Mask',
           tech: ['SVG', 'GSAP', 'Canvas'],
           github: `${projectRoot}/components/PageDripMask`,
+        },
+        {
+          id: uniqueId('project-'),
+          route: { name: 'drawToReveal' },
+          title: 'Draw to Reveal',
+          tech: ['WebGL', 'GLSL', 'Three.JS', 'FBOs'],
+          github: `${projectRoot}/components/PageDrawToReveal`,
         },
       ],
     }
