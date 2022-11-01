@@ -19,5 +19,5 @@ void main() {
   float falloff = smoothstep(uFalloff, 0.0, length(cursor)) * uAlpha;
   color.rgb = mix(color.rgb, stamp, falloff);
   gl_FragColor = color;
-  gl_FragColor.a = 1.0;
+  gl_FragColor.a = uAlpha;
 }

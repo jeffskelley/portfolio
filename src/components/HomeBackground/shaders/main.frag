@@ -32,7 +32,7 @@ void main() {
   uv.x *= uAspect;
   // uv = uv / 2.0 + 0.5;
 
-  uv += flow.xy * -1.0 * 0.2; // distort
+  uv += flow.xy * -1.0 * 0.1; // distort
 
   float time = uTime * speed;
   
@@ -45,6 +45,5 @@ void main() {
     noise2
   );
   vec4 blended = blendOver(vec4(color1, noise2blurred), vec4(color2, 1.0));
-  // vec3 color = mix(blended.rgb, color3, mask);
   gl_FragColor = vec4(blended.rgb, 1.0);
 }

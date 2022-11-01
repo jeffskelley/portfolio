@@ -6,7 +6,6 @@ import gsap from 'gsap'
 
 import vertexShader from './shaders/basic.vert'
 import fragmentShader from './shaders/main.frag'
-// import maskFragmentShader from './shaders/mask.frag'
 import flowmapFragmentShader from './shaders/flowmap.frag'
 
 let windowWidth = window.innerWidth
@@ -92,7 +91,7 @@ const flowmapMaterial = new THREE.ShaderMaterial({
     uAspect,
     uFalloff: { value: 0.15 },
     uDissipation: { value: 0.97 },
-    uAlpha: { value: 1.0 },
+    uAlpha: { value: 0.3 },
     uMouse: { value: mouse },
     uVelocity: { value: velocityTweened },
   },
