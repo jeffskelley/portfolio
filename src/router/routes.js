@@ -3,11 +3,13 @@ import SynthwaveOcean from '@/components/PageSynthwaveOcean'
 import LiquidText from '@/components/PageLiquidText'
 import DrawToReveal from '@/components/PageDrawToReveal'
 import DripMask from '@/components/PageDripMask'
-import GradientCircles from '@/components/PageGradientCircles'
 import BambooAlbumGrid from '@/components/PageBambooAlbumGrid'
 import HomeBackground from '@/components/HomeBackground'
-
 import ParticleTorrent from '@/components/PageParticleTorrent'
+
+import GradientCircles from '@/components/PageGradientCircles'
+import Reflections from '@/components/PageReflections'
+import PageRays from '@/components/PageRays'
 import Boids from '@/components/PageBoids'
 import BambooStickerPeel from '@/components/PageBambooStickerPeel'
 
@@ -43,6 +45,12 @@ const routes = [
     component: SynthwaveOcean,
     meta: { noScroll: true },
   },
+  {
+    name: 'reflections',
+    path: '/reflections',
+    component: Reflections,
+    meta: { noScroll: true },
+  },
 
   // not added to main yet
   {
@@ -59,8 +67,14 @@ const routes = [
   },
   {
     name: 'pageHomeBackground',
-    path: '/page-home-background',
+    path: '/homepage-background',
     component: HomeBackground,
+    meta: { noScroll: true },
+  },
+  {
+    name: 'pageRays',
+    path: '/rays',
+    component: PageRays,
     meta: { noScroll: true },
   },
 ]
