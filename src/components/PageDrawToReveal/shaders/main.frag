@@ -17,8 +17,9 @@ vec2 getScaledUV(vec2 uv, vec2 image, vec2 screen) {
 
 void main() {
   float mask = texture2D(tMask, vUV).r;
+  float maskSharpened = smoothstep(0.4, 0.6, mask);
   vec3 color1 = texture2D(tImage1, getScaledUV(vUV, uImage1Dimensions, uScreenDimensions)).rgb;
   vec3 color2 = texture2D(tImage2, getScaledUV(vUV, uImage2Dimensions, uScreenDimensions)).rgb;
-  gl_FragColor.rgb = mix(color1, color2, 1.0 - mask);
+  gl_FragColor.rgb = mix(color1, color2, 1.0 - maskSharpened);
   gl_FragColor.a = 1.0;
 }

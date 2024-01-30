@@ -10,7 +10,7 @@ import ProjectContainer from '@/components/ProjectContainer.vue'
 import ButtonSolid from '@/components/ButtonSolid.vue'
 
 import * as THREE from 'three'
-import basicVertexShader from './shaders/basic.vert'
+import vertexShader from './shaders/basic.vert'
 import maskFragmentShader from './shaders/mask.frag'
 import mainFragmentShader from './shaders/main.frag'
 
@@ -31,23 +31,13 @@ renderer.setPixelRatio(window.devicePixelRatio)
 /**
  * Cameras
  */
-const camera = new THREE.PerspectiveCamera()
-camera.position.set(config.cameraPosition.x, config.cameraPosition.y, config.cameraPosition.z)
+const camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5)
+camera.position.set(0, 0, 1)
 camera.lookAt(0, 0, 0)
-let maskCamera = camera.clone()
 
 // mouse values will be between 0 and 1
 const mouse = new THREE.Vector2(-1)
 let mouseIsDown = false
-
-/**
- * Helper functions
- */
-function getViewSizeAtDepth(camera, depth = 0) {
-  const fovInRadians = (camera.fov * Math.PI) / 180
-  const height = Math.abs((camera.position.z - depth) * Math.tan(fovInRadians / 2) * 2)
-  return { width: height * camera.aspect, height }
-}
 
 /**
  * Render Targets
@@ -76,23 +66,21 @@ const targets = {
  */
 const geometry = new THREE.PlaneGeometry()
 const maskMaterial = new THREE.ShaderMaterial({
-  vertexShader: basicVertexShader,
+  vertexShader,
   fragmentShader: maskFragmentShader,
   uniforms: {
     tMask,
     uFalloff: { value: 0.05 },
-
     uAspect: { value: windowWidth / windowHeight },
     uDimensions: { value: new THREE.Vector2(windowWidth, windowHeight) },
     uMouse: { value: mouse },
   },
 })
 const maskMesh = new THREE.Mesh(geometry, maskMaterial)
-maskMesh.position.z = -1
 maskScene.add(maskMesh)
 
 const mainMaterial = new THREE.ShaderMaterial({
-  vertexShader: basicVertexShader,
+  vertexShader,
   fragmentShader: mainFragmentShader,
   uniforms: {
     tMask,
@@ -104,7 +92,6 @@ const mainMaterial = new THREE.ShaderMaterial({
   },
 })
 const mainMesh = new THREE.Mesh(geometry, mainMaterial)
-mainMesh.position.z = -1
 scene.add(mainMesh)
 
 /**
@@ -159,7 +146,7 @@ function animate(time) {
   requestAnimationFrame(animate)
 
   renderer.setRenderTarget(targets.write)
-  renderer.render(maskScene, maskCamera)
+  renderer.render(maskScene, camera)
 
   renderer.setRenderTarget(null)
   renderer.render(scene, camera)
@@ -199,14 +186,8 @@ function resize() {
   windowHeight = window.innerHeight
   camera.aspect = windowWidth / windowHeight
   camera.updateProjectionMatrix()
-  maskCamera = camera.clone()
 
   renderer.setSize(windowWidth, windowHeight)
-
-  // resize fullscreen mesh
-  const viewSize = getViewSizeAtDepth(camera, -1)
-  maskMesh.scale.set(viewSize.width, viewSize.height)
-  mainMesh.scale.set(viewSize.width, viewSize.height)
 }
 
 function reset() {

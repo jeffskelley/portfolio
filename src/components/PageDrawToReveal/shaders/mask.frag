@@ -6,8 +6,8 @@ uniform vec2 uDimensions;
 
 varying vec2 vUV;
 
-int size = 4;
-float separation = 1.0;
+int size = 5;
+float separation = 0.5;
 
 void main() {
   // sample the texture
@@ -16,20 +16,23 @@ void main() {
   // dilate based on neighboring texels
   vec2 texelSize = vec2(1.0 / uDimensions.x, 1.0 / uDimensions.y);
 
-  float max = color.r; // use just one channel since they're all the same
+  float maxR = color.r;
+  float maxG = color.g;
+
   for (int i = -size; i <= size; ++i) {
     for (int j = -size; j <= size; ++j) {
       if (!(distance(vec2(i, j), vec2(0, 0)) <= float(size))) { continue; }
 
       // sample color 
-      float c = texture2D(tMask, vUV.xy + vec2(i, j) * texelSize * separation).r;
-      if ( c > max ) {
-        max = c;
+      vec4 tex = texture2D(tMask, vUV.xy + vec2(i, j) * texelSize * separation);
+      float r = tex.r;
+      if ( r > maxR ) {
+        maxR = r;
       }
     }
   }
 
-  color.rgb = mix(color.rgb, vec3(max), 0.5);
+  color.r = mix(color.r, maxR, 0.5);
 
   // add new input
   vec2 cursor = vUV - uMouse;
